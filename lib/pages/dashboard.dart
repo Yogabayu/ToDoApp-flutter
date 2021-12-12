@@ -299,6 +299,7 @@ class _DashboardState extends State<Dashboard> {
                                     )
                                   : SingleChildScrollView(
                                       child: ListView.builder(
+                                        padding: EdgeInsets.zero,
                                         scrollDirection: Axis.vertical,
                                         shrinkWrap: true,
                                         physics: NeverScrollableScrollPhysics(),
