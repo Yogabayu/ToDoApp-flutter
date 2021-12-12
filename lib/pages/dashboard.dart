@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:todoapp_1/constant.dart';
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:todoapp_1/helper/sql_helper.dart';
+import 'package:intl/intl.dart';
 
 String nama = "Yoga Bayu";
 final GlobalKey<FabCircularMenuState> fabKey = GlobalKey();
@@ -125,6 +126,22 @@ class _DashboardState extends State<Dashboard> {
     _refreshJournals();
   }
 
+  //pilih tanggal
+  DateTime selectedDate = DateTime.now();
+  DateFormat dateFormat = DateFormat("yyyy-MM-dd");
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+      });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -164,20 +181,14 @@ class _DashboardState extends State<Dashboard> {
                                   child: CircleAvatar(
                                     backgroundColor: Colors.greenAccent[400],
                                     radius: 30,
-                                    // child: Text(
-                                    //   'user',
-                                    //   style: TextStyle(
-                                    //       fontSize: 25, color: Colors.white),
-                                    // ), //Text
-                                    child: Image.asset(
-                                        "assets/images/user/user1.png"),
+                                    child: Image.asset("assets/icon/user1.png"),
                                   ),
                                 ),
                                 SizedBox(
                                   width: 20,
                                 ),
                                 Text(
-                                  "Hi " + nama,
+                                  "Hi. " + nama,
                                   style: TextStyle(
                                       fontFamily: "RobotoMono",
                                       fontSize: 26,
@@ -186,7 +197,6 @@ class _DashboardState extends State<Dashboard> {
                                       decoration: TextDecoration.none),
                                 ),
                                 defaultSeparator,
-                                Icon(Icons.health_and_safety)
                               ],
                             ),
                           ),
@@ -205,18 +215,28 @@ class _DashboardState extends State<Dashboard> {
                                     height: MediaQuery.of(context).size.height *
                                         0.12,
                                     child: GestureDetector(
-                                      onTap: () => print("kalender"),
+                                      onTap: () => _selectDate(context),
                                       child: Card(
                                         child: Padding(
                                           padding: EdgeInsets.all(10),
                                           child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
                                             children: [
+                                              FittedBox(
+                                                  fit: BoxFit.contain,
+                                                  child: Image.asset(
+                                                      "assets/icon/calendar.png",
+                                                      width: 30,
+                                                      height: 30)),
                                               FittedBox(
                                                   fit: BoxFit.scaleDown,
                                                   child: Text(
                                                     "Kalender",
-                                                    style:
-                                                        TextStyle(fontSize: 12),
+                                                    style: TextStyle(
+                                                        fontSize: 17,
+                                                        fontFamily:
+                                                            "Merriweather-Bold"),
                                                   )),
                                             ],
                                           ),
@@ -247,13 +267,22 @@ class _DashboardState extends State<Dashboard> {
                                         child: Padding(
                                           padding: EdgeInsets.all(10),
                                           child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
                                             children: [
                                               FittedBox(
-                                                  fit: BoxFit.scaleDown,
+                                                  fit: BoxFit.contain,
+                                                  child: Image.asset(
+                                                      "assets/icon/cloudy-day.png",
+                                                      width: 30,
+                                                      height: 30)),
+                                              FittedBox(
+                                                  fit: BoxFit.fitWidth,
                                                   child: Text(
-                                                    "Cuaca",
-                                                    style:
-                                                        TextStyle(fontSize: 12),
+                                                    "Radar Cuaca",
+                                                    style: TextStyle(
+                                                        fontFamily:
+                                                            "Merriweather-Bold"),
                                                   )),
                                             ],
                                           ),
@@ -281,7 +310,9 @@ class _DashboardState extends State<Dashboard> {
                           Padding(
                             padding: paddingCol,
                             child: Text(
-                              "Tes : ",
+                              "ToDo's " +
+                                  "${selectedDate.toLocal()}".split(' ')[0] +
+                                  " : ",
                               textAlign: TextAlign.left,
                               style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.bold),
@@ -290,9 +321,9 @@ class _DashboardState extends State<Dashboard> {
                           Padding(
                             padding: paddingCol,
                             child: Container(
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.blueAccent)),
-                              height: 400,
+                              // decoration: BoxDecoration(
+                              //     border: Border.all(color: Colors.blueAccent)),
+                              height: MediaQuery.of(context).size.height * 0.52,
                               child: _isLoading
                                   ? const Center(
                                       child: CircularProgressIndicator(),
@@ -356,8 +387,8 @@ class _DashboardState extends State<Dashboard> {
           // Cannot be `Alignment.center`
           alignment: Alignment.bottomRight,
           ringColor: Colors.blue,
-          ringDiameter: 500.0,
-          ringWidth: 150.0,
+          ringDiameter: 400.0,
+          ringWidth: MediaQuery.of(context).size.width * 0.27,
           fabSize: 64.0,
           fabElevation: 8.0,
           fabIconBorder: CircleBorder(),
@@ -379,32 +410,37 @@ class _DashboardState extends State<Dashboard> {
               },
               shape: CircleBorder(),
               padding: const EdgeInsets.all(24.0),
-              child: Icon(Icons.add_box_rounded, color: Colors.white),
+              child: CircleAvatar(
+                backgroundColor: Colors.orangeAccent[400],
+                radius: 30,
+                child: Image.asset("assets/icon/new-task.png"),
+              ),
             ),
-            // RawMaterialButton(
-            //   onPressed: () {
-            //     _showSnackBar(context, "You pressed 2");
-            //   },
-            //   shape: CircleBorder(),
-            //   padding: const EdgeInsets.all(24.0),
-            //   child: Icon(Icons.looks_two, color: Colors.white),
-            // ),
-            // RawMaterialButton(
-            //   onPressed: () {
-            //     _showSnackBar(context, "You pressed 3");
-            //   },
-            //   shape: CircleBorder(),
-            //   padding: const EdgeInsets.all(24.0),
-            //   child: Icon(Icons.looks_3, color: Colors.white),
-            // ),
             RawMaterialButton(
               onPressed: () {
-                print("1212");
+                print("User Profile");
                 fabKey.currentState!.close();
               },
               shape: CircleBorder(),
               padding: const EdgeInsets.all(24.0),
-              child: Icon(Icons.looks_4, color: Colors.white),
+              child: CircleAvatar(
+                backgroundColor: Colors.greenAccent[400],
+                radius: 30,
+                child: Image.asset("assets/icon/user1.png"),
+              ),
+            ),
+            RawMaterialButton(
+              onPressed: () {
+                print("Info App");
+                fabKey.currentState!.close();
+              },
+              shape: CircleBorder(),
+              padding: const EdgeInsets.all(24.0),
+              child: CircleAvatar(
+                backgroundColor: Colors.greenAccent[400],
+                radius: 30,
+                child: Image.asset("assets/icon/info.png"),
+              ),
             )
           ],
         ),
