@@ -50,57 +50,126 @@ class _DashboardState extends State<Dashboard> {
       _descriptionController.text = existingJournal['description'];
     }
 
-    showModalBottomSheet(
-        context: context,
-        elevation: 5,
-        builder: (_) => Container(
-              padding: const EdgeInsets.all(15),
-              width: double.infinity,
-              height: 300,
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    TextField(
-                      controller: _titleController,
-                      decoration: const InputDecoration(hintText: 'Title'),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    TextField(
-                      controller: _descriptionController,
-                      decoration:
-                          const InputDecoration(hintText: 'Description'),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    ElevatedButton(
-                      onPressed: () async {
-                        // Save new journal
-                        if (id == null) {
-                          await _addItem();
-                        }
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text("Add Todo :"),
+          content: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(15),
+                width: double.infinity,
+                height: 300,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      TextField(
+                        controller: _titleController,
+                        decoration: const InputDecoration(hintText: 'Title'),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      TextField(
+                        controller: _descriptionController,
+                        decoration:
+                            const InputDecoration(hintText: 'Description'),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          // Save new journal
+                          if (id == null) {
+                            await _addItem();
+                          }
 
-                        if (id != null) {
-                          await _updateItem(id);
-                        }
+                          if (id != null) {
+                            await _updateItem(id);
+                          }
 
-                        // Clear the text fields
-                        _titleController.text = '';
-                        _descriptionController.text = '';
+                          // Clear the text fields
+                          _titleController.text = '';
+                          _descriptionController.text = '';
 
-                        // Close the bottom sheet
-                        Navigator.of(context).pop();
-                      },
-                      child: Text(id == null ? 'Create New' : 'Update'),
-                    )
-                  ],
+                          // Close the bottom sheet
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(id == null ? 'Create New' : 'Update'),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            ));
+              )
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(onPressed: () {}, child: Text('Yes')),
+            TextButton(
+                onPressed: () {
+                  // Close the dialog
+                  Navigator.of(context).pop();
+                },
+                child: Text('No'))
+          ],
+        );
+      },
+    );
+    // showModalBottomSheet(
+    //     context: context,
+    //     elevation: 5,
+    //     builder: (_) => Container(
+    //           padding: const EdgeInsets.all(15),
+    //           width: double.infinity,
+    //           height: 300,
+    //           child: SingleChildScrollView(
+    //             child: Column(
+    //               mainAxisSize: MainAxisSize.min,
+    //               crossAxisAlignment: CrossAxisAlignment.end,
+    //               children: [
+    //                 TextField(
+    //                   controller: _titleController,
+    //                   decoration: const InputDecoration(hintText: 'Title'),
+    //                 ),
+    //                 const SizedBox(
+    //                   height: 10,
+    //                 ),
+    //                 TextField(
+    //                   controller: _descriptionController,
+    //                   decoration:
+    //                       const InputDecoration(hintText: 'Description'),
+    //                 ),
+    //                 const SizedBox(
+    //                   height: 20,
+    //                 ),
+    //                 ElevatedButton(
+    //                   onPressed: () async {
+    //                     // Save new journal
+    //                     if (id == null) {
+    //                       await _addItem();
+    //                     }
+
+    //                     if (id != null) {
+    //                       await _updateItem(id);
+    //                     }
+
+    //                     // Clear the text fields
+    //                     _titleController.text = '';
+    //                     _descriptionController.text = '';
+
+    //                     // Close the bottom sheet
+    //                     Navigator.of(context).pop();
+    //                   },
+    //                   child: Text(id == null ? 'Create New' : 'Update'),
+    //                 )
+    //               ],
+    //             ),
+    //           ),
+    //         ));
   }
 
 // Insert a new journal to the database
@@ -142,6 +211,8 @@ class _DashboardState extends State<Dashboard> {
       });
   }
 
+  //dialog box
+  void _showDialog() {}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -423,10 +494,13 @@ class _DashboardState extends State<Dashboard> {
               },
               shape: CircleBorder(),
               padding: const EdgeInsets.all(24.0),
-              child: CircleAvatar(
-                backgroundColor: Colors.greenAccent[400],
-                radius: 30,
-                child: Image.asset("assets/icon/user1.png"),
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.1,
+                child: CircleAvatar(
+                  backgroundColor: Colors.greenAccent[400],
+                  radius: 30,
+                  child: Image.asset("assets/icon/user1.png"),
+                ),
               ),
             ),
             RawMaterialButton(
