@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
+import 'package:get/get.dart';
 import 'package:todoapp_1/constant.dart';
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:todoapp_1/helper/sql_helper.dart';
 import 'package:intl/intl.dart';
+
+//page
+import 'radar.dart';
+import 'user.dart';
+import 'appinfo.dart';
 
 String nama = "Yoga Bayu";
 final GlobalKey<FabCircularMenuState> fabKey = GlobalKey();
@@ -56,19 +61,18 @@ class _DashboardState extends State<Dashboard> {
         return AlertDialog(
           title: new Text("Add Todo :"),
           content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Container(
                 padding: const EdgeInsets.all(15),
                 width: double.infinity,
-                height: 300,
                 child: SingleChildScrollView(
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       TextField(
                         controller: _titleController,
-                        decoration: const InputDecoration(hintText: 'Title'),
+                        decoration: const InputDecoration(hintText: 'Judul'),
                       ),
                       const SizedBox(
                         height: 10,
@@ -76,7 +80,7 @@ class _DashboardState extends State<Dashboard> {
                       TextField(
                         controller: _descriptionController,
                         decoration:
-                            const InputDecoration(hintText: 'Description'),
+                            const InputDecoration(hintText: 'Deskripsi'),
                       ),
                       const SizedBox(
                         height: 20,
@@ -99,7 +103,7 @@ class _DashboardState extends State<Dashboard> {
                           // Close the bottom sheet
                           Navigator.of(context).pop();
                         },
-                        child: Text(id == null ? 'Create New' : 'Update'),
+                        child: Text(id == null ? 'Tambah Baru' : 'Update'),
                       )
                     ],
                   ),
@@ -107,69 +111,9 @@ class _DashboardState extends State<Dashboard> {
               )
             ],
           ),
-          actions: <Widget>[
-            TextButton(onPressed: () {}, child: Text('Yes')),
-            TextButton(
-                onPressed: () {
-                  // Close the dialog
-                  Navigator.of(context).pop();
-                },
-                child: Text('No'))
-          ],
         );
       },
     );
-    // showModalBottomSheet(
-    //     context: context,
-    //     elevation: 5,
-    //     builder: (_) => Container(
-    //           padding: const EdgeInsets.all(15),
-    //           width: double.infinity,
-    //           height: 300,
-    //           child: SingleChildScrollView(
-    //             child: Column(
-    //               mainAxisSize: MainAxisSize.min,
-    //               crossAxisAlignment: CrossAxisAlignment.end,
-    //               children: [
-    //                 TextField(
-    //                   controller: _titleController,
-    //                   decoration: const InputDecoration(hintText: 'Title'),
-    //                 ),
-    //                 const SizedBox(
-    //                   height: 10,
-    //                 ),
-    //                 TextField(
-    //                   controller: _descriptionController,
-    //                   decoration:
-    //                       const InputDecoration(hintText: 'Description'),
-    //                 ),
-    //                 const SizedBox(
-    //                   height: 20,
-    //                 ),
-    //                 ElevatedButton(
-    //                   onPressed: () async {
-    //                     // Save new journal
-    //                     if (id == null) {
-    //                       await _addItem();
-    //                     }
-
-    //                     if (id != null) {
-    //                       await _updateItem(id);
-    //                     }
-
-    //                     // Clear the text fields
-    //                     _titleController.text = '';
-    //                     _descriptionController.text = '';
-
-    //                     // Close the bottom sheet
-    //                     Navigator.of(context).pop();
-    //                   },
-    //                   child: Text(id == null ? 'Create New' : 'Update'),
-    //                 )
-    //               ],
-    //             ),
-    //           ),
-    //         ));
   }
 
 // Insert a new journal to the database
@@ -203,7 +147,7 @@ class _DashboardState extends State<Dashboard> {
     final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
+        firstDate: DateTime(2020, 8),
         lastDate: DateTime(2101));
     if (picked != null && picked != selectedDate)
       setState(() {
@@ -212,6 +156,7 @@ class _DashboardState extends State<Dashboard> {
   }
 
   //dialog box
+  // ignore: unused_element
   void _showDialog() {}
   @override
   Widget build(BuildContext context) {
@@ -248,7 +193,7 @@ class _DashboardState extends State<Dashboard> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 GestureDetector(
-                                  onTap: () => print("sukses"),
+                                  onTap: () => Get.to(() => User()),
                                   child: CircleAvatar(
                                     backgroundColor: Colors.greenAccent[400],
                                     radius: 30,
@@ -333,7 +278,7 @@ class _DashboardState extends State<Dashboard> {
                                     height: MediaQuery.of(context).size.height *
                                         0.12,
                                     child: GestureDetector(
-                                      onTap: () => print("cuaca"),
+                                      onTap: () => Get.to(() => Radar()),
                                       child: Card(
                                         child: Padding(
                                           padding: EdgeInsets.all(10),
@@ -458,8 +403,8 @@ class _DashboardState extends State<Dashboard> {
           // Cannot be `Alignment.center`
           alignment: Alignment.bottomRight,
           ringColor: Colors.blue,
-          ringDiameter: 400.0,
-          ringWidth: MediaQuery.of(context).size.width * 0.27,
+          ringDiameter: 270.0,
+          ringWidth: MediaQuery.of(context).size.width * 0.15,
           fabSize: 64.0,
           fabElevation: 8.0,
           fabIconBorder: CircleBorder(),
@@ -481,21 +426,24 @@ class _DashboardState extends State<Dashboard> {
               },
               shape: CircleBorder(),
               padding: const EdgeInsets.all(24.0),
-              child: CircleAvatar(
-                backgroundColor: Colors.orangeAccent[400],
-                radius: 30,
-                child: Image.asset("assets/icon/new-task.png"),
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.11,
+                child: CircleAvatar(
+                  backgroundColor: Colors.orangeAccent[400],
+                  radius: 30,
+                  child: Image.asset("assets/icon/new-task.png"),
+                ),
               ),
             ),
             RawMaterialButton(
               onPressed: () {
-                print("User Profile");
+                Get.to(() => User());
                 fabKey.currentState!.close();
               },
               shape: CircleBorder(),
               padding: const EdgeInsets.all(24.0),
               child: Container(
-                width: MediaQuery.of(context).size.width * 0.1,
+                width: MediaQuery.of(context).size.width * 0.11,
                 child: CircleAvatar(
                   backgroundColor: Colors.greenAccent[400],
                   radius: 30,
@@ -505,15 +453,18 @@ class _DashboardState extends State<Dashboard> {
             ),
             RawMaterialButton(
               onPressed: () {
-                print("Info App");
+                Get.to(() => Appinfo());
                 fabKey.currentState!.close();
               },
               shape: CircleBorder(),
               padding: const EdgeInsets.all(24.0),
-              child: CircleAvatar(
-                backgroundColor: Colors.greenAccent[400],
-                radius: 30,
-                child: Image.asset("assets/icon/info.png"),
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.11,
+                child: CircleAvatar(
+                  backgroundColor: Colors.greenAccent[400],
+                  radius: 30,
+                  child: Image.asset("assets/icon/info.png"),
+                ),
               ),
             )
           ],
