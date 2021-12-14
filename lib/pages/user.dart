@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:todoapp_1/constant.dart';
 
 class User extends StatefulWidget {
@@ -58,15 +59,59 @@ class _UserState extends State<User> {
                             style: TextStyle(fontSize: 20),
                             maxLines: 2,
                           )),
-                          Padding(
-                            padding: paddingCol,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [],
-                            ),
-                          ),
                           SizedBox(
                             height: 30,
+                          ),
+                          Padding(
+                            padding: paddingCol,
+                            child: Container(
+                              padding: EdgeInsets.all(32.0),
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                border:
+                                    Border.all(width: 2, color: Colors.green),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10.0) //
+                                        ),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Text("Nama : "),
+                                      Text("Yoga Bayu"),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Text("Nama : "),
+                                      Text("Yoga Bayu"),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Text("Nama : "),
+                                      Text("Yoga Bayu"),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
                           ),
                         ],
                       ),
