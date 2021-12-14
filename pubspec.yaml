@@ -38,6 +38,9 @@ dependencies:
   sqflite: ^2.0.1
   intl: ^0.17.0
   webview_flutter: ^3.0.0
+  flutter_vector_icons: ^1.0.0
+  convex_bottom_bar: ^3.0.0
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:

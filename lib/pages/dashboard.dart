@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+// import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:todoapp_1/constant.dart';
 import 'package:fab_circular_menu/fab_circular_menu.dart';
@@ -159,9 +159,6 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-    // SystemChrome.setPreferredOrientations([
-    //   DeviceOrientation.portraitUp,
-    // ]);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
