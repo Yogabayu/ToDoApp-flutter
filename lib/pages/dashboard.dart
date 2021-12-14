@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:todoapp_1/constant.dart';
 import 'package:fab_circular_menu/fab_circular_menu.dart';
@@ -37,6 +38,7 @@ class _DashboardState extends State<Dashboard> {
   @override
   void initState() {
     super.initState();
+
     _refreshJournals(); // Loading the diary when the app starts
   }
 
@@ -155,11 +157,11 @@ class _DashboardState extends State<Dashboard> {
       });
   }
 
-  //dialog box
-  // ignore: unused_element
-  void _showDialog() {}
   @override
   Widget build(BuildContext context) {
+    // SystemChrome.setPreferredOrientations([
+    //   DeviceOrientation.portraitUp,
+    // ]);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(

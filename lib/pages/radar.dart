@@ -1,4 +1,7 @@
+import 'dart:io';
+// import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class Radar extends StatefulWidget {
   const Radar({Key? key}) : super(key: key);
@@ -9,12 +12,25 @@ class Radar extends StatefulWidget {
 
 class _RadarState extends State<Radar> {
   @override
+  void initState() {
+    super.initState();
+    // Enable virtual display.
+    if (Platform.isAndroid) WebView.platform = AndroidWebView();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // // Set landscape orientation
+    // SystemChrome.setPreferredOrientations([
+    //   DeviceOrientation.landscapeLeft,
+    //   DeviceOrientation.landscapeRight,
+    // ]);
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Radar'),
-      ),
-      body: Container(),
-    );
+        appBar: AppBar(
+          title: const Text('Title'),
+        ),
+        body: WebView(
+          initialUrl: 'https://juanda.jatim.bmkg.go.id/radar/',
+        ));
   }
 }
