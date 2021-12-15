@@ -41,6 +41,7 @@ dependencies:
   flutter_vector_icons: ^1.0.0
   convex_bottom_bar: ^3.0.0
   auto_size_text: ^3.0.0
+  http: ^0.13.4
 
 dev_dependencies:
   flutter_test:

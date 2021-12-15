@@ -145,18 +145,6 @@ class _DashboardState extends State<Dashboard> {
   DateTime selectedDate = DateTime.now();
   DateFormat dateFormat = DateFormat("yyyy-MM-dd");
 
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(2020, 8),
-        lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate)
-      setState(() {
-        selectedDate = picked;
-      });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -230,7 +218,7 @@ class _DashboardState extends State<Dashboard> {
                                     height: MediaQuery.of(context).size.height *
                                         0.12,
                                     child: GestureDetector(
-                                      onTap: () => _selectDate(context),
+                                      onTap: () => {},
                                       child: Card(
                                         child: Padding(
                                           padding: EdgeInsets.all(10),
@@ -241,15 +229,14 @@ class _DashboardState extends State<Dashboard> {
                                               FittedBox(
                                                   fit: BoxFit.contain,
                                                   child: Image.asset(
-                                                      "assets/icon/calendar.png",
+                                                      "assets/icon/earthquake.png",
                                                       width: 30,
                                                       height: 30)),
                                               FittedBox(
                                                   fit: BoxFit.scaleDown,
                                                   child: Text(
-                                                    "Kalender",
+                                                    "Info Gempa",
                                                     style: TextStyle(
-                                                        fontSize: 17,
                                                         fontFamily:
                                                             "Merriweather-Bold"),
                                                   )),
