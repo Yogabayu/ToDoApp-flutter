@@ -17,27 +17,25 @@ class _GempaState extends State<Gempa> {
   List data = []; //edited line
 
   Future<String> getSWData() async {
-    data = [];
     var res = await http.get(
-      Uri.parse("https://cuaca-gempa-rest-api.vercel.app/quake"),
+      Uri.parse("http://cuaca-gempa-rest-api.vercel.app/quake"),
     );
-    if (res.statusCode == 200) {
-      var resBody = json.decode(res.body)['data'];
+    // if (res.statusCode == 200) {
 
-      setState(() {
-        data = resBody;
-      });
+    // } else {}
+    var resBody = json.decode(res.body);
 
+    setState(() {
+      data = resBody["data"];
       print(data);
-    } else {}
-
+    });
     return "Sucess";
   }
 
   @override
   void initState() {
     super.initState();
-    this.getSWData();
+    // this.getSWData();
   }
 
   @override
@@ -107,39 +105,40 @@ class _GempaState extends State<Gempa> {
                               SizedBox(
                                 height: 120,
                               ),
-                              Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 20, right: 20),
-                                  child: ListTileTheme(
-                                    contentPadding: EdgeInsets.all(15),
-                                    iconColor: Colors.blue,
-                                    textColor: Colors.black,
-                                    tileColor: Colors.yellow[100],
-                                    style: ListTileStyle.list,
-                                    dense: true,
-                                    child: ListView.builder(
-                                      shrinkWrap: true,
-                                      itemCount: data.length,
-                                      itemBuilder: (_, index) => Card(
-                                          margin: EdgeInsets.all(10),
-                                          child: GestureDetector(
-                                            onTap: () => {},
-                                            child: ListTile(
-                                              title: Text(""),
-                                              trailing: Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  IconButton(
-                                                      onPressed: () {
-                                                        setState(() {});
-                                                      },
-                                                      icon: Icon(Icons.delete)),
-                                                ],
-                                              ),
-                                            ),
-                                          )),
-                                    ),
-                                  ))
+                              ElevatedButton(
+                                child: const Text('test'),
+                                onPressed: () {
+                                  getSWData();
+                                },
+                              )
+                              // Padding(
+                              //     padding: const EdgeInsets.only(
+                              //         left: 20, right: 20),
+                              //     child: ListTileTheme(
+                              //       contentPadding: EdgeInsets.all(15),
+                              //       iconColor: Colors.blue,
+                              //       textColor: Colors.black,
+                              //       tileColor: Colors.yellow[100],
+                              //       style: ListTileStyle.list,
+                              //       dense: true,
+                              //       child: ListView.builder(
+                              //         shrinkWrap: true,
+                              //         itemCount: data.length,
+                              //         itemBuilder: (_, index) => Card(
+                              //             margin: EdgeInsets.all(10),
+                              //             child: GestureDetector(
+                              //               onTap: () => {},
+                              //               child: ListTile(
+                              //                 title:
+                              //                     Text(data[index]["wilayah"]),
+                              //                 trailing: Row(
+                              //                   mainAxisSize: MainAxisSize.min,
+                              //                   children: [],
+                              //                 ),
+                              //               ),
+                              //             )),
+                              //       ),
+                              //     ))
                             ])
                       ],
                     ),

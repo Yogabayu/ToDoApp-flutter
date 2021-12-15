@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:todoapp_1/constant.dart';
+
+TextEditingController _namaController = TextEditingController();
 
 class User extends StatefulWidget {
   const User({Key? key}) : super(key: key);
@@ -50,18 +51,14 @@ class _UserState extends State<User> {
                               ),
                             ),
                           ),
-                          SizedBox(
-                            height: 20,
-                          ),
+                          defaultSeparator,
                           Center(
                               child: AutoSizeText(
                             "User Profile",
                             style: TextStyle(fontSize: 20),
                             maxLines: 2,
                           )),
-                          SizedBox(
-                            height: 30,
-                          ),
+                          defaultSeparator,
                           Padding(
                             padding: paddingCol,
                             child: Container(
@@ -81,32 +78,64 @@ class _UserState extends State<User> {
                                 children: [
                                   Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text("Nama : "),
-                                      Text("Yoga Bayu"),
+                                      Expanded(
+                                        child: TextFormField(
+                                          textAlign: TextAlign.end,
+                                          enabled: false,
+                                          controller: _namaController,
+                                          decoration: InputDecoration(
+                                            labelStyle: TextStyle(
+                                                fontSize: 17,
+                                                color: Colors.green,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                      )
                                     ],
                                   ),
-                                  SizedBox(
-                                    height: 30,
-                                  ),
+                                  defaultSeparator,
                                   Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text("Nama : "),
-                                      Text("Yoga Bayu"),
+                                      Text("Nomor HP : "),
+                                      Expanded(
+                                        child: TextFormField(
+                                          textAlign: TextAlign.end,
+                                          enabled: false,
+                                          controller: _namaController,
+                                          decoration: InputDecoration(
+                                            labelStyle: TextStyle(
+                                                fontSize: 17,
+                                                color: Colors.green,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                      )
                                     ],
                                   ),
-                                  SizedBox(
-                                    height: 30,
-                                  ),
+                                  defaultSeparator,
                                   Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text("Nama : "),
-                                      Text("Yoga Bayu"),
+                                      Text("Alamat : "),
+                                      Expanded(
+                                        child: TextFormField(
+                                          textAlign: TextAlign.end,
+                                          enabled: false,
+                                          controller: _namaController,
+                                          decoration: InputDecoration(
+                                            labelStyle: TextStyle(
+                                                fontSize: 17,
+                                                color: Colors.green,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                      )
                                     ],
                                   )
                                 ],

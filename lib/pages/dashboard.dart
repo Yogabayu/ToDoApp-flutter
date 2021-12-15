@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'radar.dart';
 import 'user.dart';
 import 'appinfo.dart';
+import 'gempa.dart';
 
 String nama = "Yoga Bayu";
 final GlobalKey<FabCircularMenuState> fabKey = GlobalKey();
@@ -218,7 +219,7 @@ class _DashboardState extends State<Dashboard> {
                                     height: MediaQuery.of(context).size.height *
                                         0.12,
                                     child: GestureDetector(
-                                      onTap: () => {},
+                                      onTap: () => Get.to(() => Gempa()),
                                       child: Card(
                                         child: Padding(
                                           padding: EdgeInsets.all(10),
