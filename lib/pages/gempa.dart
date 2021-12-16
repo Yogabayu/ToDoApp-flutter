@@ -3,7 +3,6 @@ import "package:flutter/material.dart";
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/widgets.dart';
-import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class Gempa extends StatefulWidget {
@@ -14,19 +13,21 @@ class Gempa extends StatefulWidget {
 }
 
 class _GempaState extends State<Gempa> {
+  bool isLoading = true;
   List data = []; //edited line
 
   Future<String> getSWData() async {
     var res = await http.get(
-      Uri.parse("http://cuaca-gempa-rest-api.vercel.app/quake"),
+      Uri.parse("http://myapps3.000webhostapp.com/API-main/list/bmkg"),
     );
     // if (res.statusCode == 200) {
 
     // } else {}
-    var resBody = json.decode(res.body);
+    var resBody = json.decode(res.body)["gempa"];
 
     setState(() {
-      data = resBody["data"];
+      data = resBody;
+      isLoading = false;
       print(data);
     });
     return "Sucess";
@@ -35,7 +36,7 @@ class _GempaState extends State<Gempa> {
   @override
   void initState() {
     super.initState();
-    // this.getSWData();
+    this.getSWData();
   }
 
   @override
@@ -66,18 +67,36 @@ class _GempaState extends State<Gempa> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text(
-                          "Info Gempa Terakhir",
-                          style: TextStyle(
-                              fontFamily: "RobotoMono",
-                              fontSize: 26,
-                              color: Colors.black,
-                              decoration: TextDecoration.none),
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.7,
+                          child: FittedBox(
+                            child: Text(
+                              "Update Info Gempa Indonesia",
+                              style: TextStyle(
+                                  fontFamily: "RobotoMono",
+                                  fontSize: 26,
+                                  color: Colors.black,
+                                  decoration: TextDecoration.none),
+                            ),
+                          ),
                         ),
                         SizedBox(
                           width: 10,
                         ),
                         Icon(Icons.health_and_safety)
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Source: BMKG",
+                          style: TextStyle(
+                              fontFamily: "RobotoMono",
+                              fontSize: 12,
+                              color: Colors.black,
+                              decoration: TextDecoration.none),
+                        ),
                       ],
                     ),
                   ],
@@ -89,6 +108,7 @@ class _GempaState extends State<Gempa> {
             //resizeToAvoidBottomInset: false,
             backgroundColor: Colors.transparent,
             body: SingleChildScrollView(
+              physics: ClampingScrollPhysics(),
               child: Column(
                 children: <Widget>[
                   Padding(
@@ -105,40 +125,71 @@ class _GempaState extends State<Gempa> {
                               SizedBox(
                                 height: 120,
                               ),
-                              ElevatedButton(
-                                child: const Text('test'),
-                                onPressed: () {
-                                  getSWData();
-                                },
-                              )
-                              // Padding(
-                              //     padding: const EdgeInsets.only(
-                              //         left: 20, right: 20),
-                              //     child: ListTileTheme(
-                              //       contentPadding: EdgeInsets.all(15),
-                              //       iconColor: Colors.blue,
-                              //       textColor: Colors.black,
-                              //       tileColor: Colors.yellow[100],
-                              //       style: ListTileStyle.list,
-                              //       dense: true,
-                              //       child: ListView.builder(
-                              //         shrinkWrap: true,
-                              //         itemCount: data.length,
-                              //         itemBuilder: (_, index) => Card(
-                              //             margin: EdgeInsets.all(10),
-                              //             child: GestureDetector(
-                              //               onTap: () => {},
-                              //               child: ListTile(
-                              //                 title:
-                              //                     Text(data[index]["wilayah"]),
-                              //                 trailing: Row(
-                              //                   mainAxisSize: MainAxisSize.min,
-                              //                   children: [],
-                              //                 ),
-                              //               ),
-                              //             )),
-                              //       ),
-                              //     ))
+                              isLoading
+                                  ? CircularProgressIndicator()
+                                  : Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 20, right: 20),
+                                      child: ListTileTheme(
+                                        contentPadding: EdgeInsets.all(15),
+                                        iconColor: Colors.blue,
+                                        textColor: Colors.black,
+                                        tileColor: Colors.yellow[100],
+                                        style: ListTileStyle.list,
+                                        dense: true,
+                                        child: ListView.builder(
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          shrinkWrap: true,
+                                          itemCount: data.length - 25,
+                                          itemBuilder: (_, index) => Card(
+                                              margin: EdgeInsets.all(10),
+                                              child: GestureDetector(
+                                                onTap: () => {},
+                                                child: ListTile(
+                                                  title: Text(
+                                                    "Daerah: " +
+                                                        data[index]["wilayah"],
+                                                    style: TextStyle(
+                                                        fontFamily:
+                                                            "RobotoMono",
+                                                        color: Colors.black,
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        decoration:
+                                                            TextDecoration
+                                                                .none),
+                                                  ),
+                                                  subtitle: Row(
+                                                    children: [
+                                                      Text(
+                                                          "Waktu: " +
+                                                              data[index][
+                                                                  "waktu_gempa"] +
+                                                              "\n" +
+                                                              "Magnitudo: " +
+                                                              data[index][
+                                                                  "magnitudo"] +
+                                                              " SR" +
+                                                              "\n" +
+                                                              "Kedalaman: " +
+                                                              data[index]
+                                                                  ["kedalaman"],
+                                                          style: TextStyle(
+                                                              fontFamily:
+                                                                  "RobotoMono",
+                                                              color:
+                                                                  Colors.black,
+                                                              decoration:
+                                                                  TextDecoration
+                                                                      .none))
+                                                    ],
+                                                  ),
+                                                ),
+                                              )),
+                                        ),
+                                      ))
                             ])
                       ],
                     ),

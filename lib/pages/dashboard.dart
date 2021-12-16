@@ -62,7 +62,7 @@ class _DashboardState extends State<Dashboard> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: new Text("Add Todo :"),
+          title: new Text("Tambahkan Jadwal :"),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -137,7 +137,7 @@ class _DashboardState extends State<Dashboard> {
   void _deleteItem(int id) async {
     await SQLHelper.deleteItem(id);
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text('Successfully deleted a journal!'),
+      content: Text('Sukses menghapus Jadwal!'),
     ));
     _refreshJournals();
   }
@@ -313,9 +313,7 @@ class _DashboardState extends State<Dashboard> {
                           Padding(
                             padding: paddingCol,
                             child: Text(
-                              "ToDo's " +
-                                  "${selectedDate.toLocal()}".split(' ')[0] +
-                                  " : ",
+                              "ToDo's :",
                               textAlign: TextAlign.left,
                               style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.bold),

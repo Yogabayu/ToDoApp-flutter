@@ -1,7 +1,8 @@
+import 'dart:convert';
 import 'dart:io';
 // import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:http/http.dart' as http;
 
 class Radar extends StatefulWidget {
   const Radar({Key? key}) : super(key: key);
@@ -14,8 +15,6 @@ class _RadarState extends State<Radar> {
   @override
   void initState() {
     super.initState();
-    // Enable virtual display.
-    if (Platform.isAndroid) WebView.platform = AndroidWebView();
   }
 
   @override
@@ -29,8 +28,6 @@ class _RadarState extends State<Radar> {
         appBar: AppBar(
           title: const Text('Title'),
         ),
-        body: WebView(
-          initialUrl: 'https://juanda.jatim.bmkg.go.id/radar/',
-        ));
+        body: Container());
   }
 }
