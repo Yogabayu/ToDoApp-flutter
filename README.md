@@ -1,4 +1,4 @@
-A Simple ToDO app with calendar and weather radar (East Java, Central Java, and Yogykarta).
+A Simple ToDO app with Earthquake information and weather radar (East Java, Central Java, and Yogykarta).
 
 Made with FLutter,
 
