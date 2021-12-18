@@ -40,31 +40,6 @@ class _DashboardState extends State<Dashboard> {
 
   //datepicker
 
-  String convertDateTimeDisplay(String date) {
-    final DateFormat displayFormater = DateFormat('yyyy-MM-dd HH:mm:ss.SSS');
-    final DateFormat serverFormater = DateFormat('yyyy-MM-dd');
-    final DateTime displayDate = displayFormater.parse(date);
-    formatted = serverFormater.format(displayDate);
-    return formatted;
-  }
-
-  void _showDatePicker() {
-    showDatePicker(
-            context: context,
-            initialDate: DateTime.now(),
-            firstDate: DateTime.now(),
-            lastDate: DateTime(2050))
-        .then((value) {
-      if (value == null) {
-        return;
-      }
-      setState(() {
-        _datePicked = value;
-        convertDateTimeDisplay(_datePicked.toString());
-      });
-    });
-  }
-
   @override
   void initState() {
     super.initState();
@@ -89,72 +64,165 @@ class _DashboardState extends State<Dashboard> {
 
     showDialog(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: new Text("Tambahkan Jadwal :"),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(15),
-                width: double.infinity,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      TextField(
-                        controller: _titleController,
-                        decoration: const InputDecoration(hintText: 'Judul'),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      TextField(
-                        controller: _descriptionController,
-                        decoration:
-                            const InputDecoration(hintText: 'Deskripsi'),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      TextButton(
-                        child: Text(
-                          'Pilih Tanggal',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+      builder: (context) {
+        return StatefulBuilder(builder: (context, setState) {
+          String convertDateTimeDisplay(String date) {
+            final DateFormat displayFormater =
+                DateFormat('yyyy-MM-dd HH:mm:ss.SSS');
+            final DateFormat serverFormater = DateFormat('yyyy-MM-dd');
+            final DateTime displayDate = displayFormater.parse(date);
+            formatted = serverFormater.format(displayDate);
+            return formatted;
+          }
+
+          void _showDatePicker() {
+            showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime.now(),
+                    lastDate: DateTime(2050))
+                .then((value) {
+              if (value == null) {
+                return;
+              }
+              setState(() {
+                _datePicked = value;
+                convertDateTimeDisplay(_datePicked.toString());
+              });
+            });
+          }
+
+          return AlertDialog(
+            title: new Text("Tambahkan Jadwal :"),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(15),
+                  width: double.infinity,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        TextField(
+                          controller: _titleController,
+                          decoration: const InputDecoration(hintText: 'Judul'),
                         ),
-                        onPressed: () => _showDatePicker(),
-                      ),
-                      Text(formatted),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          // Save new journal
-                          if (id == null) {
-                            await _addItem();
-                          }
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        TextField(
+                          controller: _descriptionController,
+                          decoration:
+                              const InputDecoration(hintText: 'Deskripsi'),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        TextButton(
+                          child: Text(
+                            'Pilih Tanggal',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          onPressed: () => _showDatePicker(),
+                        ),
+                        Text(formatted),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        ElevatedButton(
+                          onPressed: () async {
+                            // Save new journal
+                            if (id == null) {
+                              await _addItem();
+                            }
 
-                          if (id != null) {
-                            await _updateItem(id);
-                          }
+                            if (id != null) {
+                              await _updateItem(id);
+                            }
 
-                          // Clear the text fields
-                          _titleController.text = '';
-                          _descriptionController.text = '';
+                            // Clear the text fields
+                            _titleController.text = '';
+                            _descriptionController.text = '';
 
-                          // Close the bottom sheet
-                          Navigator.of(context).pop();
-                        },
-                        child: Text(id == null ? 'Tambah Baru' : 'Update'),
-                      )
-                    ],
+                            // Close the bottom sheet
+                            Navigator.of(context).pop();
+                          },
+                          child: Text(id == null ? 'Tambah Baru' : 'Update'),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              )
-            ],
-          ),
-        );
+                )
+              ],
+            ),
+          );
+        });
+        // return AlertDialog(
+        //   title: new Text("Tambahkan Jadwal :"),
+        //   content: Column(
+        //     mainAxisSize: MainAxisSize.min,
+        //     crossAxisAlignment: CrossAxisAlignment.end,
+        //     children: [
+        //       Container(
+        //         padding: const EdgeInsets.all(15),
+        //         width: double.infinity,
+        //         child: SingleChildScrollView(
+        //           child: Column(
+        //             children: [
+        //               TextField(
+        //                 controller: _titleController,
+        //                 decoration: const InputDecoration(hintText: 'Judul'),
+        //               ),
+        //               const SizedBox(
+        //                 height: 10,
+        //               ),
+        //               TextField(
+        //                 controller: _descriptionController,
+        //                 decoration:
+        //                     const InputDecoration(hintText: 'Deskripsi'),
+        //               ),
+        //               const SizedBox(
+        //                 height: 10,
+        //               ),
+        //               TextButton(
+        //                 child: Text(
+        //                   'Pilih Tanggal',
+        //                   style: TextStyle(fontWeight: FontWeight.bold),
+        //                 ),
+        //                 onPressed: () => _showDatePicker(),
+        //               ),
+        //               Text(formatted),
+        //               const SizedBox(
+        //                 height: 20,
+        //               ),
+        //               ElevatedButton(
+        //                 onPressed: () async {
+        //                   // Save new journal
+        //                   if (id == null) {
+        //                     await _addItem();
+        //                   }
+
+        //                   if (id != null) {
+        //                     await _updateItem(id);
+        //                   }
+
+        //                   // Clear the text fields
+        //                   _titleController.text = '';
+        //                   _descriptionController.text = '';
+
+        //                   // Close the bottom sheet
+        //                   Navigator.of(context).pop();
+        //                 },
+        //                 child: Text(id == null ? 'Tambah Baru' : 'Update'),
+        //               )
+        //             ],
+        //           ),
+        //         ),
+        //       )
+        //     ],
+        //   ),
+        // );
       },
     );
   }
