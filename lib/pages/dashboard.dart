@@ -5,9 +5,10 @@ import 'package:todoapp_1/constant.dart';
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:todoapp_1/helper/sql_helper.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 //page
-import 'radar.dart';
+// import 'radar.dart';
 import 'user.dart';
 import 'appinfo.dart';
 import 'gempa.dart';
@@ -38,7 +39,14 @@ class _DashboardState extends State<Dashboard> {
     });
   }
 
-  //datepicker
+  _launchURL() async {
+    const url = 'https://juanda.jatim.bmkg.go.id/radar/';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'erorrrr slurr $url';
+    }
+  }
 
   @override
   void initState() {
@@ -69,7 +77,7 @@ class _DashboardState extends State<Dashboard> {
           String convertDateTimeDisplay(String date) {
             final DateFormat displayFormater =
                 DateFormat('yyyy-MM-dd HH:mm:ss.SSS');
-            final DateFormat serverFormater = DateFormat('yyyy-MM-dd');
+            final DateFormat serverFormater = DateFormat('dd-MM-yyyy');
             final DateTime displayDate = displayFormater.parse(date);
             formatted = serverFormater.format(displayDate);
             return formatted;
@@ -158,71 +166,6 @@ class _DashboardState extends State<Dashboard> {
             ),
           );
         });
-        // return AlertDialog(
-        //   title: new Text("Tambahkan Jadwal :"),
-        //   content: Column(
-        //     mainAxisSize: MainAxisSize.min,
-        //     crossAxisAlignment: CrossAxisAlignment.end,
-        //     children: [
-        //       Container(
-        //         padding: const EdgeInsets.all(15),
-        //         width: double.infinity,
-        //         child: SingleChildScrollView(
-        //           child: Column(
-        //             children: [
-        //               TextField(
-        //                 controller: _titleController,
-        //                 decoration: const InputDecoration(hintText: 'Judul'),
-        //               ),
-        //               const SizedBox(
-        //                 height: 10,
-        //               ),
-        //               TextField(
-        //                 controller: _descriptionController,
-        //                 decoration:
-        //                     const InputDecoration(hintText: 'Deskripsi'),
-        //               ),
-        //               const SizedBox(
-        //                 height: 10,
-        //               ),
-        //               TextButton(
-        //                 child: Text(
-        //                   'Pilih Tanggal',
-        //                   style: TextStyle(fontWeight: FontWeight.bold),
-        //                 ),
-        //                 onPressed: () => _showDatePicker(),
-        //               ),
-        //               Text(formatted),
-        //               const SizedBox(
-        //                 height: 20,
-        //               ),
-        //               ElevatedButton(
-        //                 onPressed: () async {
-        //                   // Save new journal
-        //                   if (id == null) {
-        //                     await _addItem();
-        //                   }
-
-        //                   if (id != null) {
-        //                     await _updateItem(id);
-        //                   }
-
-        //                   // Clear the text fields
-        //                   _titleController.text = '';
-        //                   _descriptionController.text = '';
-
-        //                   // Close the bottom sheet
-        //                   Navigator.of(context).pop();
-        //                 },
-        //                 child: Text(id == null ? 'Tambah Baru' : 'Update'),
-        //               )
-        //             ],
-        //           ),
-        //         ),
-        //       )
-        //     ],
-        //   ),
-        // );
       },
     );
   }
@@ -230,16 +173,14 @@ class _DashboardState extends State<Dashboard> {
 // Insert a new journal to the database
   Future<void> _addItem() async {
     await SQLHelper.createItem(
-        _titleController.text,
-        _descriptionController.text,
-        "${_datePicked.day}/${_datePicked.month}/${_datePicked.year}");
+        _titleController.text, _descriptionController.text, formatted);
     _refreshJournals();
   }
 
   // Update an existing journal
   Future<void> _updateItem(int id) async {
     await SQLHelper.updateItem(
-        id, _titleController.text, _descriptionController.text);
+        id, _titleController.text, _descriptionController.text, formatted);
     _refreshJournals();
   }
 
@@ -371,7 +312,7 @@ class _DashboardState extends State<Dashboard> {
                                     height: MediaQuery.of(context).size.height *
                                         0.12,
                                     child: GestureDetector(
-                                      onTap: () => Get.to(() => Radar()),
+                                      onTap: () => _launchURL(),
                                       child: Card(
                                         child: Padding(
                                           padding: EdgeInsets.all(10),
