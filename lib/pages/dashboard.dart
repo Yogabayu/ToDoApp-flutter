@@ -14,6 +14,8 @@ import 'gempa.dart';
 
 String nama = "Yoga Bayu";
 final GlobalKey<FabCircularMenuState> fabKey = GlobalKey();
+DateTime _datePicked = DateTime.now();
+String formatted = "";
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -33,6 +35,33 @@ class _DashboardState extends State<Dashboard> {
     setState(() {
       _journals = data;
       _isLoading = false;
+    });
+  }
+
+  //datepicker
+
+  String convertDateTimeDisplay(String date) {
+    final DateFormat displayFormater = DateFormat('yyyy-MM-dd HH:mm:ss.SSS');
+    final DateFormat serverFormater = DateFormat('yyyy-MM-dd');
+    final DateTime displayDate = displayFormater.parse(date);
+    formatted = serverFormater.format(displayDate);
+    return formatted;
+  }
+
+  void _showDatePicker() {
+    showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime.now(),
+            lastDate: DateTime(2050))
+        .then((value) {
+      if (value == null) {
+        return;
+      }
+      setState(() {
+        _datePicked = value;
+        convertDateTimeDisplay(_datePicked.toString());
+      });
     });
   }
 
@@ -86,6 +115,17 @@ class _DashboardState extends State<Dashboard> {
                             const InputDecoration(hintText: 'Deskripsi'),
                       ),
                       const SizedBox(
+                        height: 10,
+                      ),
+                      TextButton(
+                        child: Text(
+                          'Pilih Tanggal',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        onPressed: () => _showDatePicker(),
+                      ),
+                      Text(formatted),
+                      const SizedBox(
                         height: 20,
                       ),
                       ElevatedButton(
@@ -122,7 +162,9 @@ class _DashboardState extends State<Dashboard> {
 // Insert a new journal to the database
   Future<void> _addItem() async {
     await SQLHelper.createItem(
-        _titleController.text, _descriptionController.text);
+        _titleController.text,
+        _descriptionController.text,
+        "${_datePicked.day}/${_datePicked.month}/${_datePicked.year}");
     _refreshJournals();
   }
 
@@ -141,10 +183,6 @@ class _DashboardState extends State<Dashboard> {
     ));
     _refreshJournals();
   }
-
-  //pilih tanggal
-  DateTime selectedDate = DateTime.now();
-  DateFormat dateFormat = DateFormat("yyyy-MM-dd");
 
   @override
   Widget build(BuildContext context) {
@@ -343,7 +381,9 @@ class _DashboardState extends State<Dashboard> {
                                               title: Text(
                                                   _journals[index]['title']),
                                               subtitle: Text(_journals[index]
-                                                  ['description']),
+                                                      ['description'] +
+                                                  "\n" +
+                                                  _journals[index]['tanggal']),
                                               trailing: SizedBox(
                                                 width: 100,
                                                 child: Row(

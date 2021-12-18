@@ -7,6 +7,7 @@ class SQLHelper {
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         title TEXT,
         description TEXT,
+        tanggal VARCHAR,
         createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
       )
       """);
@@ -17,7 +18,7 @@ class SQLHelper {
 
   static Future<sql.Database> db() async {
     return sql.openDatabase(
-      'kindacode.db',
+      'todo.db',
       version: 1,
       onCreate: (sql.Database database, int version) async {
         await createTables(database);
@@ -26,10 +27,15 @@ class SQLHelper {
   }
 
   // Create new item (journal)
-  static Future<int> createItem(String title, String? descrption) async {
+  static Future<int> createItem(
+      String title, String? descrption, String? tanggal) async {
     final db = await SQLHelper.db();
 
-    final data = {'title': title, 'description': descrption};
+    final data = {
+      'title': title,
+      'description': descrption,
+      'tanggal': tanggal
+    };
     final id = await db.insert('items', data,
         conflictAlgorithm: sql.ConflictAlgorithm.replace);
     return id;
