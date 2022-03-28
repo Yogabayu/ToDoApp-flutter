@@ -469,22 +469,22 @@ class _DashboardState extends State<Dashboard> {
                 ),
               ),
             ),
-            RawMaterialButton(
-              onPressed: () {
-                Get.to(() => User());
-                fabKey.currentState!.close();
-              },
-              shape: CircleBorder(),
-              padding: const EdgeInsets.all(24.0),
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.11,
-                child: CircleAvatar(
-                  backgroundColor: Colors.greenAccent[400],
-                  radius: 30,
-                  child: Image.asset("assets/icon/user1.png"),
-                ),
-              ),
-            ),
+            // RawMaterialButton(
+            //   onPressed: () {
+            //     Get.to(() => User());
+            //     fabKey.currentState!.close();
+            //   },
+            //   shape: CircleBorder(),
+            //   padding: const EdgeInsets.all(24.0),
+            //   child: Container(
+            //     width: MediaQuery.of(context).size.width * 0.11,
+            //     child: CircleAvatar(
+            //       backgroundColor: Colors.greenAccent[400],
+            //       radius: 30,
+            //       child: Image.asset("assets/icon/user1.png"),
+            //     ),
+            //   ),
+            // ),
             RawMaterialButton(
               onPressed: () {
                 Get.to(() => Appinfo());
