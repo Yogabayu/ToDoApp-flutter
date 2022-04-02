@@ -1,22 +1,28 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:todoapp_1/constant.dart';
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:todoapp_1/helper/sql_helper.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:todoapp_1/constants/theme.dart';
+import 'package:todoapp_1/controllers/theme_controller.dart';
 
 //page
-// import 'radar.dart';
 import 'user.dart';
 import 'appinfo.dart';
 import 'gempa.dart';
 
+//variables
 String nama = "Yoga Bayu";
-final GlobalKey<FabCircularMenuState> fabKey = GlobalKey();
-DateTime _datePicked = DateTime.now();
 String formatted = "";
+DateTime _datePicked = DateTime.now();
+List<Map<String, dynamic>> _journals = [];
+bool _isLoading = true;
+final TextEditingController _titleController = TextEditingController();
+final TextEditingController _descriptionController = TextEditingController();
+final themeController = Get.find<ThemeController>();
+final GlobalKey<FabCircularMenuState> fabKey = GlobalKey();
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -26,11 +32,17 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-// All journals
-  List<Map<String, dynamic>> _journals = [];
+  void updateUI() {
+    setState(() {
+      String getBackgroundAssetName() {
+        if (Get.isDarkMode)
+          return 'assets/bg_dark.jfif';
+        else
+          return 'assets/bg_image.jpg';
+      }
+    });
+  }
 
-  bool _isLoading = true;
-  // This function is used to fetch all data from the database
   void _refreshJournals() async {
     final data = await SQLHelper.getItems();
     setState(() {
@@ -51,19 +63,11 @@ class _DashboardState extends State<Dashboard> {
   @override
   void initState() {
     super.initState();
-
-    _refreshJournals(); // Loading the diary when the app starts
+    _refreshJournals();
   }
 
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
-
-  // This function will be triggered when the floating button is pressed
-  // It will also be triggered when you want to update an item
   void _showForm(int? id) async {
     if (id != null) {
-      // id == null -> create new item
-      // id != null -> update an existing item
       final existingJournal =
           _journals.firstWhere((element) => element['id'] == id);
       _titleController.text = existingJournal['title'];
@@ -170,14 +174,12 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-// Insert a new journal to the database
   Future<void> _addItem() async {
     await SQLHelper.createItem(
         _titleController.text, _descriptionController.text, formatted);
     _refreshJournals();
   }
 
-  // Update an existing journal
   Future<void> _updateItem(int id) async {
     await SQLHelper.updateItem(
         id, _titleController.text, _descriptionController.text, formatted);
@@ -204,7 +206,7 @@ class _DashboardState extends State<Dashboard> {
             Stack(
               children: [
                 Image.asset(
-                  "assets/bg_image.jpg",
+                  getBackgroundAssetName(),
                   height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
                   fit: BoxFit.cover,
@@ -246,6 +248,22 @@ class _DashboardState extends State<Dashboard> {
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold,
                                       decoration: TextDecoration.none),
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    if (Get.isDarkMode) {
+                                      themeController
+                                          .changeTheme(Themes.lightTheme);
+                                      themeController.saveTheme(false);
+                                    } else {
+                                      themeController
+                                          .changeTheme(Themes.darkTheme);
+                                      themeController.saveTheme(true);
+                                    }
+                                  },
+                                  icon: Get.isDarkMode
+                                      ? const Icon(Icons.light_mode_outlined)
+                                      : const Icon(Icons.dark_mode_outlined),
                                 ),
                                 defaultSeparator,
                               ],
