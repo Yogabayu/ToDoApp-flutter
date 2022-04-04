@@ -32,16 +32,11 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  void updateUI() {
-    setState(() {
-      String getBackgroundAssetName() {
-        if (Get.isDarkMode)
-          return 'assets/bg_dark.jfif';
-        else
-          return 'assets/bg_image.jpg';
-      }
-    });
-  }
+  // String imgUrl = "assets/bg_dark.jfif";
+  // String showImg = "assets/bg_image.jpg";
+  String showImg = "";
+  List<String> gambar = ["assets/bg_dark.jfif", "assets/bg_dark.jfif"];
+  var _index = 0;
 
   void _refreshJournals() async {
     final data = await SQLHelper.getItems();
@@ -206,7 +201,7 @@ class _DashboardState extends State<Dashboard> {
             Stack(
               children: [
                 Image.asset(
-                  getBackgroundAssetName(),
+                  showImg,
                   height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
                   fit: BoxFit.cover,
@@ -251,6 +246,9 @@ class _DashboardState extends State<Dashboard> {
                                 ),
                                 IconButton(
                                   onPressed: () {
+                                    setState(() {
+                                      showImg = gambar[_index % gambar.length];
+                                    });
                                     if (Get.isDarkMode) {
                                       themeController
                                           .changeTheme(Themes.lightTheme);
