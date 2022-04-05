@@ -7,14 +7,15 @@ import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:todoapp_1/constants/theme.dart';
 import 'package:todoapp_1/controllers/theme_controller.dart';
+import 'package:todoapp_1/controllers/user_controller.dart';
+import 'dart:async';
 
 //page
-import 'user.dart';
 import 'appinfo.dart';
-import 'gempa.dart';
+// import 'gempa.dart';
 
 //variables
-String nama = "Yoga Bayu";
+// String nama = "";
 String formatted = "";
 DateTime _datePicked = DateTime.now();
 List<Map<String, dynamic>> _journals = [];
@@ -23,6 +24,7 @@ final TextEditingController _titleController = TextEditingController();
 final TextEditingController _descriptionController = TextEditingController();
 final themeController = Get.find<ThemeController>();
 final GlobalKey<FabCircularMenuState> fabKey = GlobalKey();
+final UserController controller = Get.put(UserController());
 
 class Dashboard2 extends StatefulWidget {
   const Dashboard2({Key? key}) : super(key: key);
@@ -32,6 +34,28 @@ class Dashboard2 extends StatefulWidget {
 }
 
 class _Dashboard2State extends State<Dashboard2> {
+  // bool _checkConfiguration() => true;
+  void showAlert(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+                content: Column(
+              children: [
+                TextField(
+                  controller: controller.editingController,
+                  decoration: const InputDecoration(
+                      labelText: 'Enter User Name',
+                      border: OutlineInputBorder()),
+                ),
+                ElevatedButton(
+                    onPressed: () {
+                      controller.updateUser();
+                    },
+                    child: const Text('Update UserName'))
+              ],
+            )));
+  }
+
   void _refreshJournals() async {
     final data = await SQLHelper.getItems();
     setState(() {
@@ -53,6 +77,34 @@ class _Dashboard2State extends State<Dashboard2> {
   void initState() {
     super.initState();
     _refreshJournals();
+    // Future.delayed(Duration.zero, () => showAlert(context));
+    Future.delayed(Duration.zero, () {
+      Get.defaultDialog(
+          title: "Tambah User Name",
+          titleStyle: TextStyle(color: Colors.white),
+          middleTextStyle: TextStyle(color: Colors.white),
+          // textConfirm: "Simpan",
+          cancelTextColor: Colors.white,
+          confirmTextColor: Colors.white,
+          buttonColor: Colors.red,
+          barrierDismissible: false,
+          radius: 50,
+          content: Column(
+            children: [
+              TextField(
+                controller: controller.editingController,
+                decoration: const InputDecoration(
+                    labelText: 'Enter User Name', border: OutlineInputBorder()),
+              ),
+              ElevatedButton(
+                  onPressed: () {
+                    controller.updateUser();
+                    Get.back();
+                  },
+                  child: const Text('Update UserName'))
+            ],
+          ));
+    });
   }
 
   void _showForm(int? id) async {
@@ -207,12 +259,6 @@ class _Dashboard2State extends State<Dashboard2> {
               children: <Widget>[
                 Stack(
                   children: [
-                    // Image.asset(
-                    //   "assets/bg_image.jpg",
-                    //   height: MediaQuery.of(context).size.height,
-                    //   width: MediaQuery.of(context).size.width,
-                    //   fit: BoxFit.cover,
-                    // ),
                     Padding(
                       padding: padding,
                       child: Column(
@@ -225,7 +271,7 @@ class _Dashboard2State extends State<Dashboard2> {
                             children: <Widget>[
                               SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.1,
+                                    MediaQuery.of(context).size.height * 0.05,
                               ),
                               Padding(
                                 padding: paddingCol,
@@ -233,7 +279,7 @@ class _Dashboard2State extends State<Dashboard2> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     GestureDetector(
-                                      onTap: () => Get.to(() => User()),
+                                      onTap: () => {},
                                       child: CircleAvatar(
                                         backgroundColor:
                                             Colors.greenAccent[400],
@@ -242,18 +288,27 @@ class _Dashboard2State extends State<Dashboard2> {
                                             "assets/icon/user1.png"),
                                       ),
                                     ),
-                                    SizedBox(
-                                      width: 20,
-                                    ),
-                                    Text(
-                                      "Hi. " + nama,
-                                      style: TextStyle(
-                                          fontFamily: "RobotoMono",
-                                          fontSize: 26,
-                                          // color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                          decoration: TextDecoration.none),
-                                    ),
+                                    defaultSeparator2,
+                                    GetX<UserController>(builder: (value) {
+                                      return Text(
+                                        'Hi, ${value.user.value.userName}',
+                                        style: const TextStyle(
+                                            fontFamily: "RobotoMono",
+                                            fontSize: 26,
+                                            // color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            decoration: TextDecoration.none),
+                                      );
+                                    }),
+                                    // Text(
+                                    //   "Hi. ",
+                                    //   style: TextStyle(
+                                    //       fontFamily: "RobotoMono",
+                                    //       fontSize: 26,
+                                    //       // color: Colors.black,
+                                    //       fontWeight: FontWeight.bold,
+                                    //       decoration: TextDecoration.none),
+                                    // ),
                                     // Padding(
                                     //   padding: paddingCol,
                                     //   child: Text(
@@ -292,116 +347,116 @@ class _Dashboard2State extends State<Dashboard2> {
                               SizedBox(
                                 height: 20,
                               ),
-                              Padding(
-                                padding: paddingCol,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                        width: MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                2 -
-                                            30,
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.12,
-                                        child: GestureDetector(
-                                          onTap: () => Get.to(() => Gempa()),
-                                          child: Card(
-                                            child: Padding(
-                                              padding: EdgeInsets.all(10),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceAround,
-                                                children: [
-                                                  FittedBox(
-                                                      fit: BoxFit.contain,
-                                                      child: Image.asset(
-                                                          "assets/icon/earthquake.png",
-                                                          width: 30,
-                                                          height: 30)),
-                                                  FittedBox(
-                                                      fit: BoxFit.scaleDown,
-                                                      child: Text(
-                                                        "Info Gempa",
-                                                        style: TextStyle(
-                                                            fontFamily:
-                                                                "Merriweather-Bold"),
-                                                      )),
-                                                ],
-                                              ),
-                                            ),
-                                            elevation: 8,
-                                            shadowColor: Colors.green,
-                                            margin: EdgeInsets.only(
-                                                left: 20,
-                                                right: 0,
-                                                top: 20,
-                                                bottom: 0),
-                                            shape: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                borderSide: BorderSide(
-                                                    color: Colors.green,
-                                                    width: 1)),
-                                          ),
-                                        )),
-                                    SizedBox(
-                                        width: MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                2 -
-                                            30,
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.12,
-                                        child: GestureDetector(
-                                          onTap: () => _launchURL(),
-                                          child: Card(
-                                            child: Padding(
-                                              padding: EdgeInsets.all(10),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceAround,
-                                                children: [
-                                                  FittedBox(
-                                                      fit: BoxFit.contain,
-                                                      child: Image.asset(
-                                                          "assets/icon/cloudy-day.png",
-                                                          width: 30,
-                                                          height: 30)),
-                                                  FittedBox(
-                                                      fit: BoxFit.fitWidth,
-                                                      child: Text(
-                                                        "Radar Cuaca",
-                                                        style: TextStyle(
-                                                            fontFamily:
-                                                                "Merriweather-Bold"),
-                                                      )),
-                                                ],
-                                              ),
-                                            ),
-                                            elevation: 8,
-                                            shadowColor: Colors.green,
-                                            margin: EdgeInsets.only(
-                                                left: 20,
-                                                right: 0,
-                                                top: 20,
-                                                bottom: 0),
-                                            shape: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                borderSide: BorderSide(
-                                                    color: Colors.green,
-                                                    width: 1)),
-                                          ),
-                                        )),
-                                  ],
-                                ),
-                              ),
+                              // Padding(
+                              //   padding: paddingCol,
+                              //   child: Row(
+                              //     mainAxisAlignment: MainAxisAlignment.start,
+                              //     children: [
+                              //       SizedBox(
+                              //           width: MediaQuery.of(context)
+                              //                       .size
+                              //                       .width /
+                              //                   2 -
+                              //               30,
+                              //           height:
+                              //               MediaQuery.of(context).size.height *
+                              //                   0.12,
+                              //           child: GestureDetector(
+                              //             onTap: () => Get.to(() => Gempa()),
+                              //             child: Card(
+                              //               child: Padding(
+                              //                 padding: EdgeInsets.all(10),
+                              //                 child: Row(
+                              //                   mainAxisAlignment:
+                              //                       MainAxisAlignment
+                              //                           .spaceAround,
+                              //                   children: [
+                              //                     FittedBox(
+                              //                         fit: BoxFit.contain,
+                              //                         child: Image.asset(
+                              //                             "assets/icon/earthquake.png",
+                              //                             width: 30,
+                              //                             height: 30)),
+                              //                     FittedBox(
+                              //                         fit: BoxFit.scaleDown,
+                              //                         child: Text(
+                              //                           "Info Gempa",
+                              //                           style: TextStyle(
+                              //                               fontFamily:
+                              //                                   "Merriweather-Bold"),
+                              //                         )),
+                              //                   ],
+                              //                 ),
+                              //               ),
+                              //               elevation: 8,
+                              //               shadowColor: Colors.green,
+                              //               margin: EdgeInsets.only(
+                              //                   left: 20,
+                              //                   right: 0,
+                              //                   top: 20,
+                              //                   bottom: 0),
+                              //               shape: OutlineInputBorder(
+                              //                   borderRadius:
+                              //                       BorderRadius.circular(10),
+                              //                   borderSide: BorderSide(
+                              //                       color: Colors.green,
+                              //                       width: 1)),
+                              //             ),
+                              //           )),
+                              //       SizedBox(
+                              //           width: MediaQuery.of(context)
+                              //                       .size
+                              //                       .width /
+                              //                   2 -
+                              //               30,
+                              //           height:
+                              //               MediaQuery.of(context).size.height *
+                              //                   0.12,
+                              //           child: GestureDetector(
+                              //             onTap: () => _launchURL(),
+                              //             child: Card(
+                              //               child: Padding(
+                              //                 padding: EdgeInsets.all(10),
+                              //                 child: Row(
+                              //                   mainAxisAlignment:
+                              //                       MainAxisAlignment
+                              //                           .spaceAround,
+                              //                   children: [
+                              //                     FittedBox(
+                              //                         fit: BoxFit.contain,
+                              //                         child: Image.asset(
+                              //                             "assets/icon/cloudy-day.png",
+                              //                             width: 30,
+                              //                             height: 30)),
+                              //                     FittedBox(
+                              //                         fit: BoxFit.fitWidth,
+                              //                         child: Text(
+                              //                           "Radar Cuaca",
+                              //                           style: TextStyle(
+                              //                               fontFamily:
+                              //                                   "Merriweather-Bold"),
+                              //                         )),
+                              //                   ],
+                              //                 ),
+                              //               ),
+                              //               elevation: 8,
+                              //               shadowColor: Colors.green,
+                              //               margin: EdgeInsets.only(
+                              //                   left: 20,
+                              //                   right: 0,
+                              //                   top: 20,
+                              //                   bottom: 0),
+                              //               shape: OutlineInputBorder(
+                              //                   borderRadius:
+                              //                       BorderRadius.circular(10),
+                              //                   borderSide: BorderSide(
+                              //                       color: Colors.green,
+                              //                       width: 1)),
+                              //             ),
+                              //           )),
+                              //     ],
+                              //   ),
+                              // ),
                               SizedBox(
                                 height: 30,
                               ),
