@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:todoapp_1/constants/theme.dart';
 import 'package:todoapp_1/controllers/theme_controller.dart';
-import 'pages/dashboard.dart';
+// import 'pages/dashboard.dart';
 import 'package:todoapp_1/pages/dashboard2.dart';
 
 void main() async {

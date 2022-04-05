@@ -4,7 +4,6 @@ import 'package:todoapp_1/constant.dart';
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:todoapp_1/helper/sql_helper.dart';
 import 'package:intl/intl.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:todoapp_1/constants/theme.dart';
 import 'package:todoapp_1/controllers/theme_controller.dart';
 import 'package:todoapp_1/controllers/user_controller.dart';
@@ -12,10 +11,8 @@ import 'dart:async';
 
 //page
 import 'appinfo.dart';
-// import 'gempa.dart';
 
 //variables
-// String nama = "";
 String formatted = "";
 DateTime _datePicked = DateTime.now();
 List<Map<String, dynamic>> _journals = [];
@@ -23,7 +20,7 @@ bool _isLoading = true;
 final TextEditingController _titleController = TextEditingController();
 final TextEditingController _descriptionController = TextEditingController();
 final themeController = Get.find<ThemeController>();
-final GlobalKey<FabCircularMenuState> fabKey = GlobalKey();
+GlobalKey<FabCircularMenuState> fabKey = GlobalKey<FabCircularMenuState>();
 final UserController controller = Get.put(UserController());
 
 class Dashboard2 extends StatefulWidget {
@@ -34,28 +31,6 @@ class Dashboard2 extends StatefulWidget {
 }
 
 class _Dashboard2State extends State<Dashboard2> {
-  // bool _checkConfiguration() => true;
-  void showAlert(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-                content: Column(
-              children: [
-                TextField(
-                  controller: controller.editingController,
-                  decoration: const InputDecoration(
-                      labelText: 'Enter User Name',
-                      border: OutlineInputBorder()),
-                ),
-                ElevatedButton(
-                    onPressed: () {
-                      controller.updateUser();
-                    },
-                    child: const Text('Update UserName'))
-              ],
-            )));
-  }
-
   void _refreshJournals() async {
     final data = await SQLHelper.getItems();
     setState(() {
@@ -64,20 +39,10 @@ class _Dashboard2State extends State<Dashboard2> {
     });
   }
 
-  _launchURL() async {
-    const url = 'https://juanda.jatim.bmkg.go.id/radar/';
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'erorrrr slurr $url';
-    }
-  }
-
   @override
   void initState() {
     super.initState();
     _refreshJournals();
-    // Future.delayed(Duration.zero, () => showAlert(context));
     Future.delayed(Duration.zero, () {
       Get.defaultDialog(
           title: "Tambah User Name",
@@ -101,7 +66,7 @@ class _Dashboard2State extends State<Dashboard2> {
                     controller.updateUser();
                     Get.back();
                   },
-                  child: const Text('Update UserName'))
+                  child: const Text('Confirm'))
             ],
           ));
     });
@@ -289,6 +254,9 @@ class _Dashboard2State extends State<Dashboard2> {
                                       ),
                                     ),
                                     defaultSeparator2,
+                                    // SliverToBoxAdapter(
+                                    //   child: Row(
+                                    //     children: [
                                     GetX<UserController>(builder: (value) {
                                       return Text(
                                         'Hi, ${value.user.value.userName}',
@@ -300,6 +268,10 @@ class _Dashboard2State extends State<Dashboard2> {
                                             decoration: TextDecoration.none),
                                       );
                                     }),
+                                    //     ],
+                                    //   ),
+                                    // ),
+
                                     // Text(
                                     //   "Hi. ",
                                     //   style: TextStyle(
