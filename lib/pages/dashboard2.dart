@@ -21,16 +21,16 @@ final TextEditingController _titleController = TextEditingController();
 final TextEditingController _descriptionController = TextEditingController();
 final themeController = Get.find<ThemeController>();
 GlobalKey<FabCircularMenuState> fabKey = GlobalKey<FabCircularMenuState>();
-final UserController controller = Get.put(UserController());
 
 class Dashboard2 extends StatefulWidget {
-  const Dashboard2({Key? key}) : super(key: key);
+  Dashboard2({Key? key}) : super(key: key);
 
   @override
   _Dashboard2State createState() => _Dashboard2State();
 }
 
 class _Dashboard2State extends State<Dashboard2> {
+  final UserController controller = Get.put(UserController());
   void _refreshJournals() async {
     final data = await SQLHelper.getItems();
     setState(() {
