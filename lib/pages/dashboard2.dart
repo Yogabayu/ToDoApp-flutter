@@ -31,6 +31,35 @@ class Dashboard2 extends StatefulWidget {
 
 class _Dashboard2State extends State<Dashboard2> {
   final UserController controller = Get.put(UserController());
+  // bool _state = true;
+  void _showname() {
+    Get.defaultDialog(
+        title: "Tambah User Name",
+        titleStyle: TextStyle(color: Colors.white),
+        middleTextStyle: TextStyle(color: Colors.white),
+        // textConfirm: "Simpan",
+        cancelTextColor: Colors.white,
+        confirmTextColor: Colors.white,
+        buttonColor: Colors.red,
+        barrierDismissible: false,
+        radius: 50,
+        content: Column(
+          children: [
+            TextField(
+              controller: controller.editingController,
+              decoration: const InputDecoration(
+                  labelText: 'Enter User Name', border: OutlineInputBorder()),
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  controller.updateUser();
+                  Get.back();
+                },
+                child: const Text('Confirm'))
+          ],
+        ));
+  }
+
   void _refreshJournals() async {
     final data = await SQLHelper.getItems();
     setState(() {
@@ -43,33 +72,13 @@ class _Dashboard2State extends State<Dashboard2> {
   void initState() {
     super.initState();
     _refreshJournals();
-    Future.delayed(Duration.zero, () {
-      Get.defaultDialog(
-          title: "Tambah User Name",
-          titleStyle: TextStyle(color: Colors.white),
-          middleTextStyle: TextStyle(color: Colors.white),
-          // textConfirm: "Simpan",
-          cancelTextColor: Colors.white,
-          confirmTextColor: Colors.white,
-          buttonColor: Colors.red,
-          barrierDismissible: false,
-          radius: 50,
-          content: Column(
-            children: [
-              TextField(
-                controller: controller.editingController,
-                decoration: const InputDecoration(
-                    labelText: 'Enter User Name', border: OutlineInputBorder()),
-              ),
-              ElevatedButton(
-                  onPressed: () {
-                    controller.updateUser();
-                    Get.back();
-                  },
-                  child: const Text('Confirm'))
-            ],
-          ));
-    });
+    // if (_state == true) {
+    //   Future.delayed(Duration.zero, () {
+
+    //   });
+    //   _state = false;
+    //   print(_state);
+    // }
   }
 
   void _showForm(int? id) async {
@@ -244,7 +253,7 @@ class _Dashboard2State extends State<Dashboard2> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     GestureDetector(
-                                      onTap: () => {},
+                                      onTap: () => {_showname()},
                                       child: CircleAvatar(
                                         backgroundColor:
                                             Colors.greenAccent[400],
@@ -257,17 +266,20 @@ class _Dashboard2State extends State<Dashboard2> {
                                     // SliverToBoxAdapter(
                                     //   child: Row(
                                     //     children: [
-                                    GetX<UserController>(builder: (value) {
-                                      return Text(
-                                        'Hi, ${value.user.value.userName}',
-                                        style: const TextStyle(
-                                            fontFamily: "RobotoMono",
-                                            fontSize: 26,
-                                            // color: Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                            decoration: TextDecoration.none),
-                                      );
-                                    }),
+                                    GetX<UserController>(
+                                        init: UserController(),
+                                        builder: (value) {
+                                          return Text(
+                                            'Hi, ${value.user.value.userName}',
+                                            style: const TextStyle(
+                                                fontFamily: "RobotoMono",
+                                                fontSize: 26,
+                                                // color: Colors.black,
+                                                fontWeight: FontWeight.bold,
+                                                decoration:
+                                                    TextDecoration.none),
+                                          );
+                                        }),
                                     //     ],
                                     //   ),
                                     // ),
