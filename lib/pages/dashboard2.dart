@@ -261,15 +261,26 @@ class _Dashboard2State extends State<Dashboard2> {
                                       ),
                                     ),
                                     defaultSeparator2,
-                                    Text(
-                                      "Hi. " + datacount.read('name'),
-                                      style: TextStyle(
-                                          fontFamily: "RobotoMono",
-                                          fontSize: 26,
-                                          // color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                          decoration: TextDecoration.none),
-                                    ),
+                                    if (datacount.read('name') == null)
+                                      Text(
+                                        "Hi. " + _name,
+                                        style: TextStyle(
+                                            fontFamily: "RobotoMono",
+                                            fontSize: 26,
+                                            // color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            decoration: TextDecoration.none),
+                                      )
+                                    else
+                                      Text(
+                                        "Hi. " + datacount.read('name'),
+                                        style: TextStyle(
+                                            fontFamily: "RobotoMono",
+                                            fontSize: 26,
+                                            // color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            decoration: TextDecoration.none),
+                                      ),
                                     IconButton(
                                       onPressed: () {
                                         setState(() {
