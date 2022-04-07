@@ -78,7 +78,7 @@ class _AppinfoState extends State<Appinfo> {
                     margin: const EdgeInsets.only(right: 20, left: 30),
                     width: double.infinity,
                     child: const Text(
-                      "versi : 1.0.5",
+                      "versi : 1.1.0",
                       style: TextStyle(fontSize: 19, color: Color(0xFF5C5C5C)),
                     ),
                   ),

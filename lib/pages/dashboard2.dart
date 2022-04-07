@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:todoapp_1/constant.dart';
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:todoapp_1/helper/sql_helper.dart';
 import 'package:intl/intl.dart';
 import 'package:todoapp_1/constants/theme.dart';
 import 'package:todoapp_1/controllers/theme_controller.dart';
-import 'package:todoapp_1/controllers/user_controller.dart';
 import 'dart:async';
 
 //page
@@ -14,10 +14,13 @@ import 'appinfo.dart';
 
 //variables
 String formatted = "";
+// ignore: unused_element
+String _name = "";
 DateTime _datePicked = DateTime.now();
 List<Map<String, dynamic>> _journals = [];
 bool _isLoading = true;
 final TextEditingController _titleController = TextEditingController();
+final TextEditingController _nameController = TextEditingController();
 final TextEditingController _descriptionController = TextEditingController();
 final themeController = Get.find<ThemeController>();
 GlobalKey<FabCircularMenuState> fabKey = GlobalKey<FabCircularMenuState>();
@@ -30,8 +33,7 @@ class Dashboard2 extends StatefulWidget {
 }
 
 class _Dashboard2State extends State<Dashboard2> {
-  final UserController controller = Get.put(UserController());
-  // bool _state = true;
+  final datacount = GetStorage();
   void _showname() {
     Get.defaultDialog(
         title: "Tambah User Name",
@@ -46,13 +48,13 @@ class _Dashboard2State extends State<Dashboard2> {
         content: Column(
           children: [
             TextField(
-              controller: controller.editingController,
+              controller: _nameController,
               decoration: const InputDecoration(
                   labelText: 'Enter User Name', border: OutlineInputBorder()),
             ),
             ElevatedButton(
                 onPressed: () {
-                  controller.updateUser();
+                  datacount.write("name", _nameController.text);
                   Get.back();
                 },
                 child: const Text('Confirm'))
@@ -72,13 +74,9 @@ class _Dashboard2State extends State<Dashboard2> {
   void initState() {
     super.initState();
     _refreshJournals();
-    // if (_state == true) {
-    //   Future.delayed(Duration.zero, () {
-
-    //   });
-    //   _state = false;
-    //   print(_state);
-    // }
+    if (datacount.read('_name') != null) {
+      _name = datacount.read('_name');
+    }
   }
 
   void _showForm(int? id) async {
@@ -263,46 +261,15 @@ class _Dashboard2State extends State<Dashboard2> {
                                       ),
                                     ),
                                     defaultSeparator2,
-                                    // SliverToBoxAdapter(
-                                    //   child: Row(
-                                    //     children: [
-                                    GetX<UserController>(
-                                        init: UserController(),
-                                        builder: (value) {
-                                          return Text(
-                                            'Hi, ${value.user.value.userName}',
-                                            style: const TextStyle(
-                                                fontFamily: "RobotoMono",
-                                                fontSize: 26,
-                                                // color: Colors.black,
-                                                fontWeight: FontWeight.bold,
-                                                decoration:
-                                                    TextDecoration.none),
-                                          );
-                                        }),
-                                    //     ],
-                                    //   ),
-                                    // ),
-
-                                    // Text(
-                                    //   "Hi. ",
-                                    //   style: TextStyle(
-                                    //       fontFamily: "RobotoMono",
-                                    //       fontSize: 26,
-                                    //       // color: Colors.black,
-                                    //       fontWeight: FontWeight.bold,
-                                    //       decoration: TextDecoration.none),
-                                    // ),
-                                    // Padding(
-                                    //   padding: paddingCol,
-                                    //   child: Text(
-                                    //     "ToDo's :",
-                                    //     textAlign: TextAlign.left,
-                                    //     style: TextStyle(
-                                    //         fontSize: 20,
-                                    //         fontWeight: FontWeight.bold),
-                                    //   ),
-                                    // ),
+                                    Text(
+                                      "Hi. " + datacount.read('name'),
+                                      style: TextStyle(
+                                          fontFamily: "RobotoMono",
+                                          fontSize: 26,
+                                          // color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          decoration: TextDecoration.none),
+                                    ),
                                     IconButton(
                                       onPressed: () {
                                         setState(() {
