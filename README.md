@@ -23,8 +23,6 @@ Instal Project ini dengan git
 
 
 
-
-
 ## Authors
 
 - Github:  [@Yogabayu](https://github.com/Yogabayu)
@@ -39,8 +37,10 @@ Instal Project ini dengan git
  - [Getx](https://pub.dev/packages/get)
  - [sqflite](https://pub.dev/packages/sqflite)
 
+## License
 
-## Installation
+[MIT](https://choosealicense.com/licenses/mit/)
 
-Instal Project ini dengan git
+
+
 
