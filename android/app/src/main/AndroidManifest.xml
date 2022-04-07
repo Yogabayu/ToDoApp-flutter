@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.todoapp_1">
    <application
-        android:label="todoapp_1"
-        android:icon="@mipmap/ic_launcher">
+        android:label="ToDo-App"
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
