@@ -14,7 +14,7 @@ Instal Project ini dengan git
 
 ```bash
   git clone https://github.com/Yogabayu/ToDoApp-flutter.git
-  cd flutter_todoapp
+  cd ToDoApp-flutter
 ```
     
 ## Demo
