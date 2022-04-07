@@ -13,13 +13,13 @@ Fitur:
 Instal Project ini dengan git
 
 ```bash
-  git clone https://github.com/Yogabayu/flutter_todoapp.git
+  git clone https://github.com/Yogabayu/ToDoApp-flutter.git
   cd flutter_todoapp
 ```
     
 ## Demo
 
-<img src="https://github.com/Yogabayu/flutter_todoapp/blob/master/app_image/1.png" width="200"> <img src="https://github.com/Yogabayu/flutter_todoapp/blob/master/app_image/2.png" width="200"> <img src="https://github.com/Yogabayu/flutter_todoapp/blob/master/app_image/3.png" width="200"> <img src="https://github.com/Yogabayu/flutter_todoapp/blob/master/app_image/4.png" width="200">
+<img src="https://github.com/Yogabayu/ToDoApp-flutter/blob/main/app_image/1.png" width="200"> <img src="https://github.com/Yogabayu/ToDoApp-flutter/blob/main/app_image/2.png" width="200"> <img src="https://github.com/Yogabayu/ToDoApp-flutter/blob/main/app_image/3.png" width="200"> <img src="https://github.com/Yogabayu/ToDoApp-flutter/blob/main/app_image/4.png" width="200"> <img src="https://github.com/Yogabayu/ToDoApp-flutter/blob/main/app_image/5.png" width="200">
 
 
 
