@@ -1,29 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
+// import 'package:get_storage/get_storage.dart';
 import 'package:todoapp_1/constant.dart';
 import 'package:fab_circular_menu/fab_circular_menu.dart';
+import 'package:todoapp_1/controllers/todo_controller.dart';
 import 'package:todoapp_1/helper/sql_helper.dart';
 import 'package:intl/intl.dart';
 import 'package:todoapp_1/constants/theme.dart';
 import 'package:todoapp_1/controllers/theme_controller.dart';
-import 'dart:async';
+// import 'dart:async';
 
-//page
 import 'appinfo.dart';
 
-//variables
-String formatted = "";
-// ignore: unused_element
-String _name = "";
-DateTime _datePicked = DateTime.now();
 List<Map<String, dynamic>> _journals = [];
 bool _isLoading = true;
-final TextEditingController _titleController = TextEditingController();
-final TextEditingController _nameController = TextEditingController();
-final TextEditingController _descriptionController = TextEditingController();
-final themeController = Get.find<ThemeController>();
-GlobalKey<FabCircularMenuState> fabKey = GlobalKey<FabCircularMenuState>();
 
 class Dashboard2 extends StatefulWidget {
   Dashboard2({Key? key}) : super(key: key);
@@ -33,34 +23,9 @@ class Dashboard2 extends StatefulWidget {
 }
 
 class _Dashboard2State extends State<Dashboard2> {
-  final datacount = GetStorage();
-  void _showname() {
-    Get.defaultDialog(
-        title: "Tambah User Name",
-        titleStyle: TextStyle(color: Colors.white),
-        middleTextStyle: TextStyle(color: Colors.white),
-        // textConfirm: "Simpan",
-        cancelTextColor: Colors.white,
-        confirmTextColor: Colors.white,
-        buttonColor: Colors.red,
-        barrierDismissible: false,
-        radius: 50,
-        content: Column(
-          children: [
-            TextField(
-              controller: _nameController,
-              decoration: const InputDecoration(
-                  labelText: 'Enter User Name', border: OutlineInputBorder()),
-            ),
-            ElevatedButton(
-                onPressed: () {
-                  datacount.write("name", _nameController.text);
-                  Get.back();
-                },
-                child: const Text('Confirm'))
-          ],
-        ));
-  }
+  TodoController todoController = Get.put(TodoController());
+  final themeController = Get.find<ThemeController>();
+  GlobalKey<FabCircularMenuState> fabKey = GlobalKey<FabCircularMenuState>();
 
   void _refreshJournals() async {
     final data = await SQLHelper.getItems();
@@ -74,8 +39,8 @@ class _Dashboard2State extends State<Dashboard2> {
   void initState() {
     super.initState();
     _refreshJournals();
-    if (datacount.read('_name') != null) {
-      _name = datacount.read('_name');
+    if (todoController.datacount.read('_name') != null) {
+      todoController.name = todoController.datacount.read('_name');
     }
   }
 
@@ -83,8 +48,9 @@ class _Dashboard2State extends State<Dashboard2> {
     if (id != null) {
       final existingJournal =
           _journals.firstWhere((element) => element['id'] == id);
-      _titleController.text = existingJournal['title'];
-      _descriptionController.text = existingJournal['description'];
+      todoController.titleController.text = existingJournal['title'];
+      todoController.descriptionController.text =
+          existingJournal['description'];
     }
 
     showDialog(
@@ -96,8 +62,8 @@ class _Dashboard2State extends State<Dashboard2> {
                 DateFormat('yyyy-MM-dd HH:mm:ss.SSS');
             final DateFormat serverFormater = DateFormat('dd-MM-yyyy');
             final DateTime displayDate = displayFormater.parse(date);
-            formatted = serverFormater.format(displayDate);
-            return formatted;
+            todoController.formatted = serverFormater.format(displayDate);
+            return todoController.formatted;
           }
 
           void _showDatePicker() {
@@ -111,8 +77,8 @@ class _Dashboard2State extends State<Dashboard2> {
                 return;
               }
               setState(() {
-                _datePicked = value;
-                convertDateTimeDisplay(_datePicked.toString());
+                todoController.datePicked = value;
+                convertDateTimeDisplay(todoController.datePicked.toString());
               });
             });
           }
@@ -130,14 +96,14 @@ class _Dashboard2State extends State<Dashboard2> {
                     child: Column(
                       children: [
                         TextField(
-                          controller: _titleController,
+                          controller: todoController.titleController,
                           decoration: const InputDecoration(hintText: 'Judul'),
                         ),
                         const SizedBox(
                           height: 10,
                         ),
                         TextField(
-                          controller: _descriptionController,
+                          controller: todoController.descriptionController,
                           decoration:
                               const InputDecoration(hintText: 'Deskripsi'),
                         ),
@@ -151,7 +117,7 @@ class _Dashboard2State extends State<Dashboard2> {
                           ),
                           onPressed: () => _showDatePicker(),
                         ),
-                        Text(formatted),
+                        Text(todoController.formatted),
                         const SizedBox(
                           height: 20,
                         ),
@@ -159,16 +125,25 @@ class _Dashboard2State extends State<Dashboard2> {
                           onPressed: () async {
                             // Save new journal
                             if (id == null) {
-                              await _addItem();
+                              await todoController.addItem(
+                                  todoController.titleController.text,
+                                  todoController.descriptionController.text,
+                                  todoController.formatted);
+                              _refreshJournals();
                             }
 
                             if (id != null) {
-                              await _updateItem(id);
+                              await todoController.updateItem(
+                                  id,
+                                  todoController.titleController.text,
+                                  todoController.descriptionController.text,
+                                  todoController.formatted);
+                              _refreshJournals();
                             }
 
                             // Clear the text fields
-                            _titleController.text = '';
-                            _descriptionController.text = '';
+                            todoController.titleController.text = '';
+                            todoController.descriptionController.text = '';
 
                             // Close the bottom sheet
                             Navigator.of(context).pop();
@@ -187,26 +162,26 @@ class _Dashboard2State extends State<Dashboard2> {
     );
   }
 
-  Future<void> _addItem() async {
-    await SQLHelper.createItem(
-        _titleController.text, _descriptionController.text, formatted);
-    _refreshJournals();
-  }
+  // Future<void> _addItem() async {
+  //   await SQLHelper.createItem(
+  //       todoController.titleController.text, todoController.descriptionController.text, formatted);
+  //   _refreshJournals();
+  // }
 
-  Future<void> _updateItem(int id) async {
-    await SQLHelper.updateItem(
-        id, _titleController.text, _descriptionController.text, formatted);
-    _refreshJournals();
-  }
+  // Future<void> _updateItem(int id) async {
+  //   await SQLHelper.updateItem(id, todoController.titleController.text,
+  //       todoController.descriptionController.text, formatted);
+  //   _refreshJournals();
+  // }
 
   // Delete an item
-  void _deleteItem(int id) async {
-    await SQLHelper.deleteItem(id);
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text('Sukses menghapus Jadwal!'),
-    ));
-    _refreshJournals();
-  }
+  // void _deleteItem(int id) async {
+  //   await SQLHelper.deleteItem(id);
+  //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+  //     content: Text('Sukses menghapus Jadwal!'),
+  //   ));
+  //   _refreshJournals();
+  // }
 
   List<String> _image = ["assets/bg_image.jpg", "assets/bg_dark.jfif"];
   var _index = 0;
@@ -222,9 +197,6 @@ class _Dashboard2State extends State<Dashboard2> {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        // appBar: AppBar(
-        //   title: Text('News'),
-        // ),
         body: ListView(
           children: <Widget>[
             Column(
@@ -251,7 +223,7 @@ class _Dashboard2State extends State<Dashboard2> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     GestureDetector(
-                                      onTap: () => {_showname()},
+                                      onTap: () => {todoController.showname()},
                                       child: CircleAvatar(
                                         backgroundColor:
                                             Colors.greenAccent[400],
@@ -261,9 +233,10 @@ class _Dashboard2State extends State<Dashboard2> {
                                       ),
                                     ),
                                     defaultSeparator2,
-                                    if (datacount.read('name') == null)
+                                    if (todoController.datacount.read('name') ==
+                                        null)
                                       Text(
-                                        "Hi. " + _name,
+                                        "Hi. " + todoController.name,
                                         style: TextStyle(
                                             fontFamily: "RobotoMono",
                                             fontSize: 26,
@@ -273,11 +246,12 @@ class _Dashboard2State extends State<Dashboard2> {
                                       )
                                     else
                                       Text(
-                                        "Hi. " + datacount.read('name'),
+                                        "Hi. " +
+                                            todoController.datacount
+                                                .read('name'),
                                         style: TextStyle(
                                             fontFamily: "RobotoMono",
                                             fontSize: 26,
-                                            // color: Colors.black,
                                             fontWeight: FontWeight.bold,
                                             decoration: TextDecoration.none),
                                       ),
@@ -478,14 +452,24 @@ class _Dashboard2State extends State<Dashboard2> {
                                                                       ['id']),
                                                         ),
                                                         IconButton(
-                                                          icon: const Icon(
-                                                              Icons.delete),
-                                                          onPressed: () =>
-                                                              _deleteItem(
-                                                                  _journals[
-                                                                          index]
-                                                                      ['id']),
-                                                        ),
+                                                            icon: const Icon(
+                                                                Icons.delete),
+                                                            onPressed: () {
+                                                              todoController
+                                                                  .deleteItem(
+                                                                      context,
+                                                                      _journals[
+                                                                              index]
+                                                                          [
+                                                                          'id']);
+                                                              _refreshJournals();
+                                                            }
+
+                                                            // _deleteItem(
+                                                            //     _journals[
+                                                            //             index]
+                                                            //         ['id']),
+                                                            ),
                                                       ],
                                                     ),
                                                   )),
@@ -543,22 +527,6 @@ class _Dashboard2State extends State<Dashboard2> {
                   ),
                 ),
               ),
-              // RawMaterialButton(
-              //   onPressed: () {
-              //     Get.to(() => User());
-              //     fabKey.currentState!.close();
-              //   },
-              //   shape: CircleBorder(),
-              //   padding: const EdgeInsets.all(24.0),
-              //   child: Container(
-              //     width: MediaQuery.of(context).size.width * 0.11,
-              //     child: CircleAvatar(
-              //       backgroundColor: Colors.greenAccent[400],
-              //       radius: 30,
-              //       child: Image.asset("assets/icon/user1.png"),
-              //     ),
-              //   ),
-              // ),
               RawMaterialButton(
                 onPressed: () {
                   Get.to(() => Appinfo());
