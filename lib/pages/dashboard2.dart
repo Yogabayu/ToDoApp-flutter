@@ -8,8 +8,6 @@ import 'package:todoapp_1/helper/sql_helper.dart';
 import 'package:intl/intl.dart';
 import 'package:todoapp_1/constants/theme.dart';
 import 'package:todoapp_1/controllers/theme_controller.dart';
-// import 'dart:async';
-
 import 'appinfo.dart';
 
 List<Map<String, dynamic>> _journals = [];
@@ -26,6 +24,8 @@ class _Dashboard2State extends State<Dashboard2> {
   TodoController todoController = Get.put(TodoController());
   final themeController = Get.find<ThemeController>();
   GlobalKey<FabCircularMenuState> fabKey = GlobalKey<FabCircularMenuState>();
+  List<String> _image = ["assets/bg_image.jpg", "assets/bg_dark.jfif"];
+  var _index = 0;
 
   void _refreshJournals() async {
     final data = await SQLHelper.getItems();
@@ -42,6 +42,35 @@ class _Dashboard2State extends State<Dashboard2> {
     if (todoController.datacount.read('_name') != null) {
       todoController.name = todoController.datacount.read('_name');
     }
+  }
+
+  void showname() {
+    Get.defaultDialog(
+        title: "Tambah User Name",
+        titleStyle: TextStyle(color: Colors.white),
+        middleTextStyle: TextStyle(color: Colors.white),
+        // textConfirm: "Simpan",
+        cancelTextColor: Colors.white,
+        confirmTextColor: Colors.white,
+        buttonColor: Colors.red,
+        barrierDismissible: false,
+        radius: 50,
+        content: Column(
+          children: [
+            TextField(
+              controller: todoController.nameController,
+              decoration: const InputDecoration(
+                  labelText: 'Enter User Name', border: OutlineInputBorder()),
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  todoController.datacount
+                      .write("name", todoController.nameController.text);
+                  Get.back();
+                },
+                child: const Text('Confirm'))
+          ],
+        ));
   }
 
   void _showForm(int? id) async {
@@ -162,30 +191,6 @@ class _Dashboard2State extends State<Dashboard2> {
     );
   }
 
-  // Future<void> _addItem() async {
-  //   await SQLHelper.createItem(
-  //       todoController.titleController.text, todoController.descriptionController.text, formatted);
-  //   _refreshJournals();
-  // }
-
-  // Future<void> _updateItem(int id) async {
-  //   await SQLHelper.updateItem(id, todoController.titleController.text,
-  //       todoController.descriptionController.text, formatted);
-  //   _refreshJournals();
-  // }
-
-  // Delete an item
-  // void _deleteItem(int id) async {
-  //   await SQLHelper.deleteItem(id);
-  //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-  //     content: Text('Sukses menghapus Jadwal!'),
-  //   ));
-  //   _refreshJournals();
-  // }
-
-  List<String> _image = ["assets/bg_image.jpg", "assets/bg_dark.jfif"];
-  var _index = 0;
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -214,8 +219,7 @@ class _Dashboard2State extends State<Dashboard2> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.05,
+                                height: height * 0.05,
                               ),
                               Padding(
                                 padding: paddingCol,
@@ -223,7 +227,7 @@ class _Dashboard2State extends State<Dashboard2> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     GestureDetector(
-                                      onTap: () => {todoController.showname()},
+                                      onTap: () => {showname()},
                                       child: CircleAvatar(
                                         backgroundColor:
                                             Colors.greenAccent[400],
@@ -240,7 +244,6 @@ class _Dashboard2State extends State<Dashboard2> {
                                         style: TextStyle(
                                             fontFamily: "RobotoMono",
                                             fontSize: 26,
-                                            // color: Colors.black,
                                             fontWeight: FontWeight.bold,
                                             decoration: TextDecoration.none),
                                       )
@@ -283,116 +286,6 @@ class _Dashboard2State extends State<Dashboard2> {
                               SizedBox(
                                 height: 20,
                               ),
-                              // Padding(
-                              //   padding: paddingCol,
-                              //   child: Row(
-                              //     mainAxisAlignment: MainAxisAlignment.start,
-                              //     children: [
-                              //       SizedBox(
-                              //           width: MediaQuery.of(context)
-                              //                       .size
-                              //                       .width /
-                              //                   2 -
-                              //               30,
-                              //           height:
-                              //               MediaQuery.of(context).size.height *
-                              //                   0.12,
-                              //           child: GestureDetector(
-                              //             onTap: () => Get.to(() => Gempa()),
-                              //             child: Card(
-                              //               child: Padding(
-                              //                 padding: EdgeInsets.all(10),
-                              //                 child: Row(
-                              //                   mainAxisAlignment:
-                              //                       MainAxisAlignment
-                              //                           .spaceAround,
-                              //                   children: [
-                              //                     FittedBox(
-                              //                         fit: BoxFit.contain,
-                              //                         child: Image.asset(
-                              //                             "assets/icon/earthquake.png",
-                              //                             width: 30,
-                              //                             height: 30)),
-                              //                     FittedBox(
-                              //                         fit: BoxFit.scaleDown,
-                              //                         child: Text(
-                              //                           "Info Gempa",
-                              //                           style: TextStyle(
-                              //                               fontFamily:
-                              //                                   "Merriweather-Bold"),
-                              //                         )),
-                              //                   ],
-                              //                 ),
-                              //               ),
-                              //               elevation: 8,
-                              //               shadowColor: Colors.green,
-                              //               margin: EdgeInsets.only(
-                              //                   left: 20,
-                              //                   right: 0,
-                              //                   top: 20,
-                              //                   bottom: 0),
-                              //               shape: OutlineInputBorder(
-                              //                   borderRadius:
-                              //                       BorderRadius.circular(10),
-                              //                   borderSide: BorderSide(
-                              //                       color: Colors.green,
-                              //                       width: 1)),
-                              //             ),
-                              //           )),
-                              //       SizedBox(
-                              //           width: MediaQuery.of(context)
-                              //                       .size
-                              //                       .width /
-                              //                   2 -
-                              //               30,
-                              //           height:
-                              //               MediaQuery.of(context).size.height *
-                              //                   0.12,
-                              //           child: GestureDetector(
-                              //             onTap: () => _launchURL(),
-                              //             child: Card(
-                              //               child: Padding(
-                              //                 padding: EdgeInsets.all(10),
-                              //                 child: Row(
-                              //                   mainAxisAlignment:
-                              //                       MainAxisAlignment
-                              //                           .spaceAround,
-                              //                   children: [
-                              //                     FittedBox(
-                              //                         fit: BoxFit.contain,
-                              //                         child: Image.asset(
-                              //                             "assets/icon/cloudy-day.png",
-                              //                             width: 30,
-                              //                             height: 30)),
-                              //                     FittedBox(
-                              //                         fit: BoxFit.fitWidth,
-                              //                         child: Text(
-                              //                           "Radar Cuaca",
-                              //                           style: TextStyle(
-                              //                               fontFamily:
-                              //                                   "Merriweather-Bold"),
-                              //                         )),
-                              //                   ],
-                              //                 ),
-                              //               ),
-                              //               elevation: 8,
-                              //               shadowColor: Colors.green,
-                              //               margin: EdgeInsets.only(
-                              //                   left: 20,
-                              //                   right: 0,
-                              //                   top: 20,
-                              //                   bottom: 0),
-                              //               shape: OutlineInputBorder(
-                              //                   borderRadius:
-                              //                       BorderRadius.circular(10),
-                              //                   borderSide: BorderSide(
-                              //                       color: Colors.green,
-                              //                       width: 1)),
-                              //             ),
-                              //           )),
-                              //     ],
-                              //   ),
-                              // ),
                               SizedBox(
                                 height: 30,
                               ),
@@ -409,10 +302,7 @@ class _Dashboard2State extends State<Dashboard2> {
                               Padding(
                                 padding: paddingCol,
                                 child: Container(
-                                  // decoration: BoxDecoration(
-                                  //     border: Border.all(color: Colors.blueAccent)),
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.52,
+                                  height: height * 0.52,
                                   child: _isLoading
                                       ? const Center(
                                           child: CircularProgressIndicator(),
@@ -463,13 +353,7 @@ class _Dashboard2State extends State<Dashboard2> {
                                                                           [
                                                                           'id']);
                                                               _refreshJournals();
-                                                            }
-
-                                                            // _deleteItem(
-                                                            //     _journals[
-                                                            //             index]
-                                                            //         ['id']),
-                                                            ),
+                                                            }),
                                                       ],
                                                     ),
                                                   )),
@@ -496,7 +380,7 @@ class _Dashboard2State extends State<Dashboard2> {
             alignment: Alignment.bottomRight,
             ringColor: Colors.blue,
             ringDiameter: 270.0,
-            ringWidth: MediaQuery.of(context).size.width * 0.15,
+            ringWidth: width * 0.15,
             fabSize: 64.0,
             fabElevation: 8.0,
             fabIconBorder: CircleBorder(),
@@ -507,9 +391,6 @@ class _Dashboard2State extends State<Dashboard2> {
             fabMargin: const EdgeInsets.all(16.0),
             animationDuration: const Duration(milliseconds: 300),
             animationCurve: Curves.easeInOutCirc,
-            // onDisplayChange: (isOpen) {
-            //   _showSnackBar(context, "The menu is ${isOpen ? "open" : "closed"}");
-            // },
             children: <Widget>[
               RawMaterialButton(
                 onPressed: () {
@@ -535,7 +416,7 @@ class _Dashboard2State extends State<Dashboard2> {
                 shape: CircleBorder(),
                 padding: const EdgeInsets.all(24.0),
                 child: Container(
-                  width: MediaQuery.of(context).size.width * 0.11,
+                  width: width * 0.11,
                   child: CircleAvatar(
                     backgroundColor: Colors.greenAccent[400],
                     radius: 30,

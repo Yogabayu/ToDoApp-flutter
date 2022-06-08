@@ -26,32 +26,4 @@ class TodoController extends GetxController {
       content: Text('Sukses menghapus Jadwal!'),
     ));
   }
-
-  void showname() {
-    Get.defaultDialog(
-        title: "Tambah User Name",
-        titleStyle: TextStyle(color: Colors.white),
-        middleTextStyle: TextStyle(color: Colors.white),
-        // textConfirm: "Simpan",
-        cancelTextColor: Colors.white,
-        confirmTextColor: Colors.white,
-        buttonColor: Colors.red,
-        barrierDismissible: false,
-        radius: 50,
-        content: Column(
-          children: [
-            TextField(
-              controller: nameController,
-              decoration: const InputDecoration(
-                  labelText: 'Enter User Name', border: OutlineInputBorder()),
-            ),
-            ElevatedButton(
-                onPressed: () {
-                  datacount.write("name", nameController.text);
-                  Get.back();
-                },
-                child: const Text('Confirm'))
-          ],
-        ));
-  }
 }
