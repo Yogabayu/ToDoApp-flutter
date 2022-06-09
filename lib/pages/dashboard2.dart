@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-// import 'package:get_storage/get_storage.dart';
 import 'package:todoapp_1/constant.dart';
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:todoapp_1/controllers/todo_controller.dart';
@@ -66,6 +65,8 @@ class _Dashboard2State extends State<Dashboard2> {
                 onPressed: () {
                   todoController.datacount
                       .write("name", todoController.nameController.text);
+
+                  _refreshJournals();
                   Get.back();
                 },
                 child: const Text('Confirm'))

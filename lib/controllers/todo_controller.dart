@@ -22,8 +22,10 @@ class TodoController extends GetxController {
 
   void deleteItem(BuildContext context, int id) async {
     await SQLHelper.deleteItem(id);
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text('Sukses menghapus Jadwal!'),
-    ));
+    ScaffoldMessenger.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(const SnackBar(
+        content: Text('Sukses menghapus Jadwal!'),
+      ));
   }
 }
